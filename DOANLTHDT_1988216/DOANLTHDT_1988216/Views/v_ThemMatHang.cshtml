@@ -1,0 +1,51 @@
+﻿@using DOANLTHDT_1988216.Controllers
+@using DOANLTHDT_1988216.Entities
+
+@{
+    Layout = null;
+    c_LoaiHang c_LoaiHang = new c_LoaiHang();
+    c_MatHang c_MatHang = new c_MatHang();
+    List<LoaiHang> dsLH = c_LoaiHang.getDanhSachLoaiHang();
+
+    if(IsPost)
+    {
+        c_MatHang.themSanPham(Request["ten_mat_hang"], 
+            Request["han_sd"], 
+            Request["nha_sx"], 
+            Request["nam_sx"], 
+            Request["loai_hang"]);
+    }
+    else
+    {
+        List<MatHang> dsMH = c_MatHang.getDanhSachMatHang();
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+    <form action="~/Views/V_ThemMatHang.cshtml" method="post">
+        <input type="text" name="ten_mat_hang" placeholder="Tên mặt hàng" />
+        <input type="text" name="nha_sx" placeholder="Nhà sản xuất" />
+        <input type="date" name="han_sd" placeholder="Hạn sử dụng" />
+        <input type="date" name="nam_sx" placeholder="Năm sản xuất" />
+        <select name="loai_hang">
+           @{ 
+               foreach(var lh in dsLH)
+               {
+                   <option value=@lh.MA_LOAI_HANG>@lh.TEN_LOAI_HANG</option>
+               }
+           }
+        </select>
+        <button type="submit">Thêm mặt hàng</button>
+    </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+﻿@using DOANLTHDT_1988216.Controllers
+@using DOANLTHDT_1988216.Entities
+
+@{
+    Layout = null;
+
+    c_MatHang c_MatHang = new c_MatHang();
+    List<MatHang> dsMH = new List<MatHang>();
+    List<MatHang> result = new List<MatHang>();
+
+    if(Request["keyword"] != null && Request["search_type"] != null)
+    {
+        dsMH = c_MatHang.TimKiemMatHang(Request["keyword"],Request["search_type"]);
+    }
+    else
+    {
+        dsMH = c_MatHang.getDanhSachMatHang(); 
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <form action="~/Views/v_DanhSachMatHang.cshtml" method="get">
+        <input type="text" name="keyword" placeholder="Nhập từ khóa tìm kiếm"/>
+        <select name="search_type">
+            <option value="ten_mat_hang">Tên mặt hàng</option>
+        </select>
+        <button type="submit">Tìm kiếm</button>
+    </form>
+    <div>
+        @{ 
+            foreach(var mh in dsMH)
+            {
+                <div>@mh.MA_MAT_HANG</div>
+                <div>@mh.TEN_MAT_HANG</div>
+                <div>@mh.CONG_TY_SX</div>
+                <div>@mh.HAN_SU_DUNG</div>
+                <div>@mh.NAM_SX</div>
+                <div>@mh.LOAI_HANG</div>
+            }
+        }
+    </div>
+</body>
+</html>
