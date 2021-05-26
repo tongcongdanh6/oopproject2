@@ -9,6 +9,28 @@ namespace DOANLTHDT_1988216.Models
 {
     public class m_MatHang
     {
+
+        private void writeToFile(List<MatHang> dsMH)
+        {
+            string filePath = HttpContext.Current.Server.MapPath("~/Models/DB_MatHang.txt");
+            StreamWriter file = new StreamWriter(filePath);
+
+            // Đếm lại tổng mặt hàng
+            int TongMatHang = dsMH.Count;
+
+            // Cập nhật lại vào file
+            file.WriteLine(TongMatHang);
+
+            // Cập nhật mặt hàng lại vào file
+            foreach (var m in dsMH)
+            {
+                string textToWrite = m.MA_MAT_HANG + "," + m.TEN_MAT_HANG + "," + m.HAN_SU_DUNG.ToString() + "," + m.CONG_TY_SX + "," + m.NAM_SX.ToString() + "," + m.LOAI_HANG;
+                file.WriteLine(textToWrite);
+            }
+
+            file.Close();
+           
+        }
         public List<MatHang> getAllMatHang()
         {
             string filePath = HttpContext.Current.Server.MapPath("~/Models/DB_MatHang.txt");
@@ -139,6 +161,37 @@ namespace DOANLTHDT_1988216.Models
                 return false;
             }
             
+        }
+
+        public bool deleteMatHang(int id)
+        {
+            List<MatHang> dsMH = this.getAllMatHang();
+            MatHang temp = new MatHang();
+            bool flag = false;
+
+            foreach(var mh in dsMH)
+            {
+                if(mh.MA_MAT_HANG == id)
+                {
+                    temp = mh;
+                    flag = true;
+                    break;
+                }
+            }
+
+            if(flag)
+            {
+                dsMH.Remove(temp);
+                // Viết lại ra file
+                this.writeToFile(dsMH);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+  
         }
     }
 }

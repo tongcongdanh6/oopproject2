@@ -9,11 +9,14 @@
 
     if(IsPost)
     {
-        c_MatHang.themSanPham(Request["ten_mat_hang"], 
-            Request["han_sd"], 
-            Request["nha_sx"], 
-            Request["nam_sx"], 
+        c_MatHang.themSanPham(Request["ten_mat_hang"],
+            Request["han_sd"],
+            Request["nha_sx"],
+            Request["nam_sx"],
             Request["loai_hang"]);
+       
+            Response.Redirect("~/Views/v_DanhSachMatHang.cshtml");
+       
     }
     else
     {

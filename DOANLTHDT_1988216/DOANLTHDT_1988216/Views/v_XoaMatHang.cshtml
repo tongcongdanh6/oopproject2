@@ -1,0 +1,73 @@
+﻿@using DOANLTHDT_1988216.Controllers
+@using DOANLTHDT_1988216.Entities
+
+@{
+    Layout = null;
+
+    c_MatHang c_MatHang = new c_MatHang();
+    c_LoaiHang c_LoaiHang = new c_LoaiHang();
+
+    List<MatHang> dsMH = new List<MatHang>();
+    List<MatHang> result = new List<MatHang>();
+
+    // Khởi tạo các biến cần thiết
+    List<LoaiHang> dsLH = new List<LoaiHang>();
+    MatHang currentMH = null;
+    string message = "";
+
+    if (!String.IsNullOrEmpty(Request["id"]))
+    {
+        dsLH = c_LoaiHang.getDanhSachLoaiHang();
+        currentMH = c_MatHang.getMatHangById(Request["id"]);
+
+        if (currentMH == null)
+        { message = "Không tìm thấy sản phẩm này để cập nhật"; }
+        else
+        {
+            message = "Bạn có thực sự muốn xóa sản phẩm <b>" + currentMH.TEN_MAT_HANG + "</b>";
+        }
+
+
+        // Nếu submit dữ liệu
+        if (IsPost)
+        {
+            if (c_MatHang.xoaMatHang(Request["id"]))
+            {
+                message = "Xóa thành công";
+                Response.Redirect("~/Views/v_DanhSachMatHang.cshtml");
+            }
+            else
+            {
+                message = "Xóa THẤT BẠI";
+            }
+        }
+    }
+    else
+    {
+        message = "Vui lòng chọn sản phẩm cần xóa";
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        @{ if(currentMH != null) { 
+        <form action="~/Views/v_XoaMatHang.cshtml?id=@currentMH.MA_MAT_HANG" method="post">
+            <button type="submit">Xóa</button>
+        </form>
+          }}        
+        @{ 
+            if (message != null)
+            {
+                @Html.Raw(message)
+            }
+        }
+    </div>
+</body>
+</html>

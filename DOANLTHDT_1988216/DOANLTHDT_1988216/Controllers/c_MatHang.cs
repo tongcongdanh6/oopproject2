@@ -43,8 +43,8 @@ namespace DOANLTHDT_1988216.Controllers
             mh.NAM_SX = Nam_SX;
             mh.LOAI_HANG = Loai_Hang;
 
-            m_MatHang m_MatHang = new m_MatHang();
-            m_MatHang.themMatHang(mh);
+            _m_mathang.themMatHang(mh);
+            
         }
 
         public List<MatHang> TimKiemMatHang(string keyword, string type)
@@ -103,6 +103,11 @@ namespace DOANLTHDT_1988216.Controllers
 
            
             return _m_mathang.updateMatHang(mh);
+        }
+
+        public bool xoaMatHang(string id)
+        {
+            return _m_mathang.deleteMatHang(int.Parse(id));
         }
     }
 

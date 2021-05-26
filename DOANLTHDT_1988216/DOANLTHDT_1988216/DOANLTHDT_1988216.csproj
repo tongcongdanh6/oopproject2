@@ -108,6 +108,7 @@
     <Content Include="Views\v_DanhSachMatHang.cshtml" />
     <Content Include="Views\v_ThemMatHang.cshtml" />
     <Content Include="Views\v_SuaMatHang.cshtml" />
+    <Content Include="Views\v_XoaMatHang.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
