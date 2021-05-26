@@ -70,5 +70,22 @@ namespace DOANLTHDT_1988216.Controllers
             }
             return result;
         }
+
+        public bool capNhatLoaiHang(string id, string TenLH)
+        {
+
+            // Tạo Object Loại Hàng cần update
+            LoaiHang lh = new LoaiHang();
+            lh.MA_LOAI_HANG = int.Parse(id);
+            lh.TEN_LOAI_HANG = TenLH;
+
+
+            return _m_loaihang.updateLoaiHang(lh);
+        }
+
+        public bool xoaLoaiHang(string id)
+        {
+            return _m_loaihang.deleteLoaiHang(int.Parse(id));
+        }
     }
 }

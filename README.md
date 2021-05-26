@@ -9,4 +9,7 @@
 - Sửa, Xóa
 
 ### Module Loại Hàng
-- Thêm, Tìm Kiếm
+- Thêm, Tìm Kiếm, Sửa, Xóa
+
+### Module Hóa Đơn Nhập Hàng
+- Danh sách

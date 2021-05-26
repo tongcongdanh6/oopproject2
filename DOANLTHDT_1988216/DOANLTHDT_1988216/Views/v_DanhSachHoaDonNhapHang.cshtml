@@ -3,20 +3,21 @@
 
 @{
     Layout = "~/Views/_Layout.cshtml";
-    Page.Title = "Danh sách mặt hàng";
+    Page.Title = "Danh sách hóa đơn nhập hàng";
 
-    c_MatHang c_MatHang = new c_MatHang();
-    c_LoaiHang c_LoaiHang = new c_LoaiHang();
-    List<MatHang> dsMH = new List<MatHang>();
-    List<MatHang> result = new List<MatHang>();
+    c_HoaDonNhapHang c_HDNH = new c_HoaDonNhapHang();
+    c_MatHang c_MH = new c_MatHang();
+
+    List<HoaDonNhapHang> dsHD = new List<HoaDonNhapHang>();
+    List<HoaDonNhapHang> result = new List<HoaDonNhapHang>();
 
     if (Request["keyword"] != null && Request["search_type"] != null)
     {
-        dsMH = c_MatHang.TimKiemMatHang(Request["keyword"], Request["search_type"]);
+        // dsHD = c_HoaDonNhapHang.TimKiemMatHang(Request["keyword"], Request["search_type"]);
     }
     else
     {
-        dsMH = c_MatHang.getDanhSachMatHang();
+        dsHD = c_HDNH.getDanhSachHoaDonNhapHang();
     }
 }
 
@@ -48,35 +49,33 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h2 class="text-center">Danh sách mặt hàng</h2>
+            <h2 class="text-center">Danh sách hóa đơn nhập hàng</h2>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Mã</th>
-                        <th>Tên</th>
-                        <th>Công ty SX</th>
-                        <th>Hạn SD</th>
-                        <th>Năm SX</th>
-                        <th>Loại hàng</th>
+                        <th>Tên mặt hàng</th>
+                        <th>Số lượng nhập</th>
+                        <th>Đơn giá</th>
+                        <th>Phí ship</th>
+                        <th>Ngày nhập hàng</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
                     @{
-                        foreach (var mh in dsMH)
+                        foreach (var hd in dsHD)
                         {
                             <tr>
-                                <td>@mh.MA_MAT_HANG</td>
-                                <td>@mh.TEN_MAT_HANG</td>
-                                <td>@mh.CONG_TY_SX</td>
-                                <td>@mh.HAN_SU_DUNG.ToString("dd/MM/yyyy")</td>
-                                <td>@mh.NAM_SX.ToString("dd/MM/yyyy")</td>
-                                <td>@{
-                                        @c_LoaiHang.getLoaiHangById(mh.LOAI_HANG.ToString()).TEN_LOAI_HANG;
-                                    }</td>
+                                <td>@hd.MA_HOA_DON</td>
+                                <td>@c_MH.getMatHangById(hd.MA_MAT_HANG.ToString()).TEN_MAT_HANG</td>
+                                <td>@String.Format("{0:n0}", hd.SO_LUONG)</td>
+                                <td>@String.Format("{0:n0} VNĐ", hd.DON_GIA)</td>
+                                <td>@String.Format("{0:n0} VNĐ", hd.PHI_SHIP)</td>
+                                <td>@hd.NGAY_NHAP.ToString("dd/MM/yyyy")</td>
                                 <td>
-                                    <a class="btn btn-primary" href="~/Views/v_SuaMatHang.cshtml?id=@mh.MA_MAT_HANG">Sửa</a>
-                                    <a class="btn btn-danger" href="~/Views/v_XoaMatHang.cshtml?id=@mh.MA_MAT_HANG">Xóa</a>
+                                    <a class="btn btn-primary" href="~/Views/v_SuaMatHang.cshtml?id=@hd.MA_HOA_DON">Sửa</a>
+                                    <a class="btn btn-danger" href="~/Views/v_XoaMatHang.cshtml?id=@hd.MA_HOA_DON">Xóa</a>
                                 </td>
                             </tr>
                         }

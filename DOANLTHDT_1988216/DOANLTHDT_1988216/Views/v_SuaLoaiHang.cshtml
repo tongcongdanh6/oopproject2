@@ -1,0 +1,70 @@
+﻿@using DOANLTHDT_1988216.Controllers
+@using DOANLTHDT_1988216.Entities
+
+@{
+    Layout = "_Layout.cshtml";
+    Page.Title = "Sửa loại hàng";
+
+    c_MatHang c_MatHang = new c_MatHang();
+    c_LoaiHang c_LoaiHang = new c_LoaiHang();
+
+    List<MatHang> dsMH = new List<MatHang>();
+    List<MatHang> result = new List<MatHang>();
+
+    // Khởi tạo các biến cần thiết
+    List<LoaiHang> dsLH = new List<LoaiHang>();
+    LoaiHang currentLH = null;
+    string message = "";
+
+    if (!String.IsNullOrEmpty(Request["id"]))
+    {
+        currentLH = c_LoaiHang.getLoaiHangById(Request["id"]);
+
+        if (currentLH == null)
+        { message = "Không tìm thấy loại hàng này để cập nhật"; }
+
+
+        // Nếu submit dữ liệu
+        if (IsPost)
+        {
+            if (c_LoaiHang.capNhatLoaiHang(
+                 Request["id"],
+                 Request["ten_loai_hang"]
+                 ))
+            {
+                message = "Cập nhật thành công";
+                Response.Redirect("~/Views/v_DanhSachLoaiHang.cshtml");
+            }
+            else
+            {
+                message = "Cập nhật THẤT BẠI";
+            }
+        }
+    }
+    else
+    {
+        message = "Vui lòng chọn loại hàng cần cập nhật";
+    }
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            @{ if (currentLH != null)
+                {
+                    <form action="~/Views/v_SuaLoaiHang.cshtml?id=@currentLH.MA_LOAI_HANG" method="post">
+                        <label for="ten_loai_hang">Tên loại hàng:</label>
+                        <input type="text" class="form-control" name="ten_loai_hang" placeholder="Tên loại hàng" value="@currentLH.TEN_LOAI_HANG" />
+                        <button type="submit" class="btn btn-primary">Sửa loại hàng</button>
+                    </form>
+                }
+            }
+
+            @{
+                if (!String.IsNullOrEmpty(message))
+                {
+                   <div class="alert alert-info">@message</div>
+                }
+            }
+        </div>
+    </div>
+</div>

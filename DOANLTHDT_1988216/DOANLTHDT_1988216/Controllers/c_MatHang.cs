@@ -109,6 +109,8 @@ namespace DOANLTHDT_1988216.Controllers
         {
             return _m_mathang.deleteMatHang(int.Parse(id));
         }
+
+
     }
 
 }

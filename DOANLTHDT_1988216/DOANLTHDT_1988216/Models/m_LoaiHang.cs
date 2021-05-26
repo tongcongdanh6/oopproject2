@@ -91,5 +91,63 @@ namespace DOANLTHDT_1988216.Models
             // Viết list mới vào file
             this.writeToFile(dsLH);
         }
+
+        public bool updateLoaiHang(LoaiHang newLH)
+        {
+            List<LoaiHang> dsLH = this.getAllLoaiHang();
+            bool flag = false;
+            foreach (var lh in dsLH)
+            {
+                if (lh.MA_LOAI_HANG == newLH.MA_LOAI_HANG)
+                {
+                    // Tìm thấy thì update thông tin mới
+                    lh.TEN_LOAI_HANG = newLH.TEN_LOAI_HANG;
+                    flag = true;
+                    break;
+                }
+            }
+
+            // Nếu tìm thấy id MatHang này trong DB thì tiến hành update
+            if (flag)
+            {
+                this.writeToFile(dsLH);
+                return true;
+            }
+            else
+            {
+                // Không thấy thì return false
+                return false;
+            }
+        }
+
+        public bool deleteLoaiHang(int id)
+        {
+            List<LoaiHang> dsLH = this.getAllLoaiHang();
+            LoaiHang temp = new LoaiHang();
+            bool flag = false;
+
+            foreach (var lh in dsLH)
+            {
+                if (lh.MA_LOAI_HANG == id)
+                {
+                    temp = lh;
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (flag)
+            {
+                dsLH.Remove(temp);
+                // Viết lại ra file
+                this.writeToFile(dsLH);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

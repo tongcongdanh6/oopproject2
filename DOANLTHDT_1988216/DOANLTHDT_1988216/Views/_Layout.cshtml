@@ -12,7 +12,7 @@
 
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
             <!-- Brand -->
-            <a class="navbar-brand" href="#">Logo</a>
+            <a class="navbar-brand" href="#">Quản lý cửa hàng</a>
 
             <!-- Links -->
             <ul class="navbar-nav">
@@ -39,13 +39,28 @@
                         <a class="dropdown-item" href="~/Views/v_XoaMatHang.cshtml">Xóa loại hàng</a>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link 1</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        Hóa đơn nhập hàng
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="~/Views/v_DanhSachHoaDonNhapHang.cshtml">Danh sách Hóa đơn nhập hàng</a>
+                        <a class="dropdown-item" href="~/Views/v_ThemLoaiHang.cshtml">Thêm Hóa đơn nhập hàng</a>
+                        <a class="dropdown-item" href="~/Views/v_SuaMatHang.cshtml">Sửa Hóa đơn nhập hàng</a>
+                        <a class="dropdown-item" href="~/Views/v_XoaMatHang.cshtml">Xóa Hóa đơn nhập hàng</a>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link 2</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        Hóa đơn bán hàng
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="~/Views/v_DanhSachLoaiHang.cshtml">Danh sách Hóa đơn bán hàng</a>
+                        <a class="dropdown-item" href="~/Views/v_ThemLoaiHang.cshtml">Thêm Hóa đơn bán hàng</a>
+                        <a class="dropdown-item" href="~/Views/v_SuaMatHang.cshtml">Sửa Hóa đơn bán hàng</a>
+                        <a class="dropdown-item" href="~/Views/v_XoaMatHang.cshtml">Xóa Hóa đơn bán hàng</a>
+                    </div>
                 </li>
-
 
             </ul>
         </nav>

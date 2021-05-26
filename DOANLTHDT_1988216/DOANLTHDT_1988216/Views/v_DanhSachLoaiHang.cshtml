@@ -23,25 +23,20 @@
 
 <div class="container-fluid">
 
-    <div class="row justify-content-center">
-        <form action="~/Views/v_DanhSachLoaiHang.cshtml" method="get">
-            <div class="col">
-                <div class="form-group">
-                    <label for="keyword">Nhập từ khóa tìm kiếm:</label>
-                    <input type="text" name="keyword" class="form-control" placeholder="Từ khóa">
-                </div>
+    <div class="row justify-content-center py-5">
+        <form class="form-inline" action="~/Views/v_DanhSachLoaiHang.cshtml" method="get">
+            <div class="form-group mx-2">
+                <label for="keyword">Nhập từ khóa tìm kiếm: </label>
+                <input type="text" name="keyword" class="form-control" placeholder="Từ khóa">
             </div>
-            <div class="col">
-                <div class="form-group">
-                    <select name="search_type" class="form-control">
-                        <option value="ten_loai_hang">Tên loại hàng</option>
-                        <option value="ma_loai_hang">Mã loại hàng</option>
-                    </select>
-                    </div>
-                </div>
-            <div class="col">
-                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <div class="form-group mx-2">
+                <label for="search_type">Loại tìm kiếm: </label>
+                <select name="search_type" class="form-control">
+                    <option value="ten_loai_hang">Tên loại hàng</option>
+                    <option value="ma_loai_hang">Mã loại hàng</option>
+                </select>
             </div>
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
         </form>
     </div>
 
@@ -55,6 +50,7 @@
                     <tr>
                         <th>Mã</th>
                         <th>Tên loại hàng</th>
+                        <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,8 +61,8 @@
                                 <td>@lh.MA_LOAI_HANG</td>
                                 <td>@lh.TEN_LOAI_HANG</td>
                                 <td>
-                                    <a class="btn btn-primary" href="~/Views/v_SuaMatHang.cshtml?id=@lh.MA_LOAI_HANG">Sửa</a>
-                                    <a class="btn btn-danger" href="~/Views/v_XoaMatHang.cshtml?id=@lh.MA_LOAI_HANG">Xóa</a>
+                                    <a class="btn btn-primary" href="~/Views/v_SuaLoaiHang.cshtml?id=@lh.MA_LOAI_HANG">Sửa</a>
+                                    <a class="btn btn-danger" href="~/Views/v_XoaLoaiHang.cshtml?id=@lh.MA_LOAI_HANG">Xóa</a>
                                 </td>
                             </tr>
                         }
