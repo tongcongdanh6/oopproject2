@@ -7,3 +7,6 @@
 ## 20:00 26/05/2021
 ### Module Mặt Hàng
 - Sửa, Xóa
+
+### Module Loại Hàng
+- Thêm, Tìm Kiếm

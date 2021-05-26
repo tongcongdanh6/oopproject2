@@ -9,6 +9,28 @@ namespace DOANLTHDT_1988216.Models
 {
     public class m_LoaiHang
     {
+
+        private void writeToFile(List<LoaiHang> dsLH)
+        {
+            string filePath = HttpContext.Current.Server.MapPath("~/Models/DB_LoaiHang.txt");
+            StreamWriter file = new StreamWriter(filePath);
+
+            // Đếm lại tổng loại hàng
+            int TongLoaiHang = dsLH.Count;
+
+            // Cập nhật lại vào file
+            file.WriteLine(TongLoaiHang);
+
+            // Cập nhật mặt hàng lại vào file
+            foreach (var m in dsLH)
+            {
+                string textToWrite = m.MA_LOAI_HANG + "," + m.TEN_LOAI_HANG;
+                file.WriteLine(textToWrite);
+            }
+
+            file.Close();
+        }
+
         public List<LoaiHang> getAllLoaiHang()
         {
             string filePath = HttpContext.Current.Server.MapPath("~/Models/DB_LoaiHang.txt");
@@ -30,6 +52,44 @@ namespace DOANLTHDT_1988216.Models
             file.Close();
 
             return dsLH;
+        }
+
+        public LoaiHang getLoaiHangById(int id)
+        {
+            List<LoaiHang> dsLH = this.getAllLoaiHang();
+            foreach(var lh in dsLH)
+            {
+                if(lh.MA_LOAI_HANG == id)
+                {
+                    return lh;
+                }
+            }
+
+            return null;
+        }
+
+        public void addLoaiHang(LoaiHang newLH)
+        {
+            // Đọc dữ liệu cũ
+            List<LoaiHang> dsLH = this.getAllLoaiHang();
+            int newId = 0;
+            foreach (var m in dsLH)
+            {
+                if (newId < m.MA_LOAI_HANG)
+                {
+                    newId = m.MA_LOAI_HANG;
+                }
+            }
+            newId++; // Mã loại hàng mới
+
+            LoaiHang MH = new LoaiHang();
+            MH.MA_LOAI_HANG = newId;
+            MH.TEN_LOAI_HANG = newLH.TEN_LOAI_HANG;
+            // Thêm vào list hiện tại
+            dsLH.Add(MH);
+
+            // Viết list mới vào file
+            this.writeToFile(dsLH);
         }
     }
 }

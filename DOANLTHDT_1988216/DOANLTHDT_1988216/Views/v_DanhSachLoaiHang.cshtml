@@ -3,27 +3,28 @@
 
 @{
     Layout = "~/Views/_Layout.cshtml";
-    Page.Title = "Danh sách mặt hàng";
+    Page.Title = "Danh sách loại hàng";
 
     c_MatHang c_MatHang = new c_MatHang();
     c_LoaiHang c_LoaiHang = new c_LoaiHang();
-    List<MatHang> dsMH = new List<MatHang>();
-    List<MatHang> result = new List<MatHang>();
+    List<LoaiHang> dsLH = new List<LoaiHang>();
+    List<LoaiHang> result = new List<LoaiHang>();
+
 
     if (Request["keyword"] != null && Request["search_type"] != null)
     {
-        dsMH = c_MatHang.TimKiemMatHang(Request["keyword"], Request["search_type"]);
+        dsLH = c_LoaiHang.TimKiemLoaiHang(Request["keyword"], Request["search_type"]);
     }
     else
     {
-        dsMH = c_MatHang.getDanhSachMatHang();
+        dsLH = c_LoaiHang.getDanhSachLoaiHang();
     }
 }
 
 <div class="container-fluid">
 
     <div class="row justify-content-center">
-        <form action="~/Views/v_DanhSachMatHang.cshtml" method="get">
+        <form action="~/Views/v_DanhSachLoaiHang.cshtml" method="get">
             <div class="col">
                 <div class="form-group">
                     <label for="keyword">Nhập từ khóa tìm kiếm:</label>
@@ -33,8 +34,8 @@
             <div class="col">
                 <div class="form-group">
                     <select name="search_type" class="form-control">
-                        <option value="ten_mat_hang">Tên mặt hàng</option>
-                        <option value="ma_mat_hang">Mã mặt hàng</option>
+                        <option value="ten_loai_hang">Tên loại hàng</option>
+                        <option value="ma_loai_hang">Mã loại hàng</option>
                     </select>
                     </div>
                 </div>
@@ -48,35 +49,24 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h2 class="text-center">Danh sách mặt hàng</h2>
+            <h2 class="text-center">Danh sách loại hàng</h2>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Mã</th>
-                        <th>Tên</th>
-                        <th>Công ty SX</th>
-                        <th>Hạn SD</th>
-                        <th>Năm SX</th>
-                        <th>Loại hàng</th>
-                        <th>Thao tác</th>
+                        <th>Tên loại hàng</th>
                     </tr>
                 </thead>
                 <tbody>
                     @{
-                        foreach (var mh in dsMH)
+                        foreach (var lh in dsLH)
                         {
                             <tr>
-                                <td>@mh.MA_MAT_HANG</td>
-                                <td>@mh.TEN_MAT_HANG</td>
-                                <td>@mh.CONG_TY_SX</td>
-                                <td>@mh.HAN_SU_DUNG</td>
-                                <td>@mh.NAM_SX</td>
-                                <td>@{
-                                        @c_LoaiHang.getLoaiHangById(mh.LOAI_HANG.ToString()).TEN_LOAI_HANG;
-                                    }</td>
+                                <td>@lh.MA_LOAI_HANG</td>
+                                <td>@lh.TEN_LOAI_HANG</td>
                                 <td>
-                                    <a class="btn btn-primary" href="~/Views/v_SuaMatHang.cshtml?id=@mh.MA_MAT_HANG">Sửa</a>
-                                    <a class="btn btn-danger" href="~/Views/v_XoaMatHang.cshtml?id=@mh.MA_MAT_HANG">Xóa</a>
+                                    <a class="btn btn-primary" href="~/Views/v_SuaMatHang.cshtml?id=@lh.MA_LOAI_HANG">Sửa</a>
+                                    <a class="btn btn-danger" href="~/Views/v_XoaMatHang.cshtml?id=@lh.MA_LOAI_HANG">Xóa</a>
                                 </td>
                             </tr>
                         }

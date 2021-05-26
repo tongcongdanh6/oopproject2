@@ -1,0 +1,35 @@
+﻿@using DOANLTHDT_1988216.Controllers
+@using DOANLTHDT_1988216.Entities
+
+@{
+    Layout = null;
+    c_LoaiHang c_LoaiHang = new c_LoaiHang();
+    c_MatHang c_MatHang = new c_MatHang();
+    List<LoaiHang> dsLH = c_LoaiHang.getDanhSachLoaiHang();
+
+    if(IsPost)
+    {
+        c_LoaiHang.themLoaiHang(Request["ten_loai_hang"]);
+       
+        Response.Redirect("~/Views/v_DanhSachLoaiHang.cshtml");
+       
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+    <form action="~/Views/v_ThemLoaiHang.cshtml" method="post">
+        <input type="text" name="ten_loai_hang" placeholder="Tên loại hàng" />
+        <button type="submit">Thêm loại hàng</button>
+    </form>
+    </div>
+
+</body>
+</html>
