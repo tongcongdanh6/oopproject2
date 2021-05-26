@@ -4,12 +4,20 @@ using System.Linq;
 using System.Web;
 using DOANLTHDT_1988216.Models;
 using DOANLTHDT_1988216.Entities;
+using DOANLTHDT_1988216.Functions;
 using System.Globalization;
+
 
 namespace DOANLTHDT_1988216.Controllers
 {
     public class c_MatHang
     {
+        private MyUltilities _ultilities;
+        public c_MatHang()
+        {
+            this._ultilities = new MyUltilities();
+        }
+
         public List<MatHang> getDanhSachMatHang()
         {
             m_MatHang m_MatHang = new m_MatHang();
@@ -52,10 +60,25 @@ namespace DOANLTHDT_1988216.Controllers
                         } 
                     }
                 break;
+                case "ma_mat_hang":
+                    foreach (var mh in dsMH)
+                    {
+                        // Kiểm tra tính hợp lệ số nguyên
+                        int n = 0;
+                        if(_ultilities.isInt(keyword, ref n))
+                        {
+                            if (mh.MA_MAT_HANG == n)
+                            {
+                                result.Add(mh);
+                            }
+                        }
+                    }
+                    break;
             }
-
             return result;
         }
+
+
     }
 
 }

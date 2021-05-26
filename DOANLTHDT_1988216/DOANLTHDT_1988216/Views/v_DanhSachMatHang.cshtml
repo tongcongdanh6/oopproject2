@@ -8,13 +8,13 @@
     List<MatHang> dsMH = new List<MatHang>();
     List<MatHang> result = new List<MatHang>();
 
-    if(Request["keyword"] != null && Request["search_type"] != null)
+    if (Request["keyword"] != null && Request["search_type"] != null)
     {
-        dsMH = c_MatHang.TimKiemMatHang(Request["keyword"],Request["search_type"]);
+        dsMH = c_MatHang.TimKiemMatHang(Request["keyword"], Request["search_type"]);
     }
     else
     {
-        dsMH = c_MatHang.getDanhSachMatHang(); 
+        dsMH = c_MatHang.getDanhSachMatHang();
     }
 }
 
@@ -27,15 +27,16 @@
 </head>
 <body>
     <form action="~/Views/v_DanhSachMatHang.cshtml" method="get">
-        <input type="text" name="keyword" placeholder="Nhập từ khóa tìm kiếm"/>
+        <input type="text" name="keyword" placeholder="Nhập từ khóa tìm kiếm" />
         <select name="search_type">
             <option value="ten_mat_hang">Tên mặt hàng</option>
+            <option value="ma_mat_hang">Mã mặt hàng</option>
         </select>
         <button type="submit">Tìm kiếm</button>
     </form>
     <div>
-        @{ 
-            foreach(var mh in dsMH)
+        @{
+            foreach (var mh in dsMH)
             {
                 <div>@mh.MA_MAT_HANG</div>
                 <div>@mh.TEN_MAT_HANG</div>

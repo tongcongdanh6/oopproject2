@@ -98,6 +98,7 @@
     <Compile Include="Controllers\c_MatHang.cs" />
     <Compile Include="Entities\LoaiHang.cs" />
     <Compile Include="Entities\MatHang.cs" />
+    <Compile Include="Functions\MyUltilities.cs" />
     <Compile Include="Models\m_LoaiHang.cs" />
     <Compile Include="Models\m_MatHang.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
