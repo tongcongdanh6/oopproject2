@@ -5,8 +5,51 @@
     Layout = null;
 
     c_MatHang c_MatHang = new c_MatHang();
+    c_LoaiHang c_LoaiHang = new c_LoaiHang();
+
     List<MatHang> dsMH = new List<MatHang>();
     List<MatHang> result = new List<MatHang>();
+
+    // Khởi tạo các biến cần thiết
+    List<LoaiHang> dsLH = new List<LoaiHang>();
+    MatHang currentMH = null;
+    string message = "";
+    string selected = "selected";
+
+    if (!String.IsNullOrEmpty(Request["id"]))
+    {
+        dsLH = c_LoaiHang.getDanhSachLoaiHang();
+        currentMH = c_MatHang.getMatHangById(Request["id"]);
+
+        if (currentMH == null)
+        { message = "Không tìm thấy sản phẩm này để cập nhật"; }
+
+
+        // Nếu submit dữ liệu
+        if (IsPost)
+        {
+            if (c_MatHang.capNhatMatHang(
+                 Request["id"],
+                 Request["ten_mat_hang"],
+                 Request["nha_sx"],
+                 Request["han_sd"],
+                 Request["nam_sx"],
+                 Request["loai_hang"]
+                 ))
+            {
+                message = "Cập nhật thành công";
+                Response.Redirect("~/Views/v_DanhSachMatHang.cshtml");
+            }
+            else
+            {
+                message = "Cập nhật THẤT BẠI";
+            }
+        }
+    }
+    else
+    {
+        message = "Vui lòng chọn sản phẩm cần cập nhật";
+    }
 }
 
 <!DOCTYPE html>
@@ -18,7 +61,38 @@
 </head>
 <body>
     <div>
-    
+        @{ if(currentMH != null) { 
+        <form action="~/Views/v_SuaMatHang.cshtml?id=@currentMH.MA_MAT_HANG" method="post">
+            Tên mặt hàng
+            <input type="text" name="ten_mat_hang" placeholder="Tên mặt hàng" value="@currentMH.TEN_MAT_HANG"/><br />
+            Nhà sản xuất
+            <input type="text" name="nha_sx" placeholder="Nhà sản xuất" value="@currentMH.CONG_TY_SX"/><br />
+            Hạn sử dụng
+            <input type="date" name="han_sd" placeholder="Hạn sử dụng" value="@currentMH.HAN_SU_DUNG.ToString("yyyy-MM-dd")"/><br />
+            Năm sx
+            <input type="date" name="nam_sx" placeholder="Năm sản xuất" value="@currentMH.NAM_SX.ToString("yyyy-MM-dd")"/><br />
+            <select name="loai_hang">
+                @{
+                    foreach (var lh in dsLH)
+                    {
+                        <option value=@lh.MA_LOAI_HANG @{
+                            if (int.Parse(Request["id"]) == lh.MA_LOAI_HANG)
+                            {
+                               @selected
+                            }
+                        }>@lh.TEN_LOAI_HANG</option>
+                    }
+                }
+            </select>
+            <button type="submit">Sửa mặt hàng</button>
+        </form>
+          }}        
+        @{ 
+            if (message != null)
+            {
+                @message
+            }
+        }
     </div>
 </body>
 </html>

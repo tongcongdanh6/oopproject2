@@ -78,5 +78,67 @@ namespace DOANLTHDT_1988216.Models
 
             file.Close();
         }
+
+        public MatHang getMatHangById(int id)
+        {
+            List<MatHang> dsMH = this.getAllMatHang();
+            foreach(var mh in dsMH)
+            {
+                if(mh.MA_MAT_HANG == id)
+                {
+                    return mh;
+                }
+            }
+            return null;
+        }
+
+        public bool updateMatHang(MatHang newMH)
+        {
+            List<MatHang> dsMH = this.getAllMatHang();
+            bool flag = false;
+            foreach (var mh in dsMH)
+            {
+                if (mh.MA_MAT_HANG == newMH.MA_MAT_HANG)
+                {
+                    // Tìm thấy thì update thông tin mới
+                    mh.TEN_MAT_HANG = newMH.TEN_MAT_HANG;
+                    mh.CONG_TY_SX = newMH.CONG_TY_SX;
+                    mh.HAN_SU_DUNG = newMH.HAN_SU_DUNG;
+                    mh.NAM_SX = newMH.NAM_SX;
+                    mh.LOAI_HANG = newMH.LOAI_HANG;
+                    flag = true;
+                    break;
+                }
+            }
+
+            // Nếu tìm thấy id MatHang này trong DB thì tiến hành update
+            if(flag)
+            {
+                string filePath = HttpContext.Current.Server.MapPath("~/Models/DB_MatHang.txt");
+                StreamWriter file = new StreamWriter(filePath);
+
+                // Đếm lại tổng mặt hàng
+                int TongMatHang = dsMH.Count;
+
+                // Cập nhật lại vào file
+                file.WriteLine(TongMatHang);
+
+                // Cập nhật mặt hàng lại vào file
+                foreach (var m in dsMH)
+                {
+                    string textToWrite = m.MA_MAT_HANG + "," + m.TEN_MAT_HANG + "," + m.HAN_SU_DUNG.ToString() + "," + m.CONG_TY_SX + "," + m.NAM_SX.ToString() + "," + m.LOAI_HANG;
+                    file.WriteLine(textToWrite);
+                }
+
+                file.Close();
+                return true;
+            }
+            else
+            {
+                // Không thấy thì return false
+                return false;
+            }
+            
+        }
     }
 }
