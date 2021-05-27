@@ -99,5 +99,33 @@ namespace DOANLTHDT_1988216.Controllers
         {
             return _m_HoaDonNhapHang.getHoaDonById(int.Parse(id));
         }
+
+        public bool suaHoaDonNhapHang(string id, string MaMH, string SoLuong, string DonGia, string PhiVanChuyen, string NgayNhap)
+        {
+            // Convert dữ liệu
+            int idHD = int.Parse(id);
+            int idMH = int.Parse(MaMH);
+            int sl = int.Parse(SoLuong);
+            int dg = int.Parse(DonGia);
+            int pvc = int.Parse(PhiVanChuyen);
+            DateTime NgayNhapHang = DateTime.Parse(NgayNhap);
+
+            // Tạo Object HoaDonNhapHang mới
+            HoaDonNhapHang hd = new HoaDonNhapHang();
+            hd.MA_HOA_DON = idHD;
+            hd.MA_MAT_HANG = idMH;
+            hd.SO_LUONG = sl;
+            hd.DON_GIA = dg;
+            hd.PHI_SHIP = pvc;
+            hd.NGAY_NHAP = NgayNhapHang;
+
+            // Gọi model
+            return _m_HoaDonNhapHang.updateHoaDon(hd);
+        }
+
+        public bool xoaHoaDon(string id)
+        {
+            return _m_HoaDonNhapHang.deleteHoaDon(int.Parse(id));
+        }
     }
 }

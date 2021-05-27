@@ -16,4 +16,6 @@
 
 ## 19:57 27/05/2021
 ### Module Hóa Đơn Nhập Hàng
-- Thêm, Tìm kiếm, Sửa (chưa xong)
+- Thêm, Tìm kiếm, Sửa, Xóa
+
+### Module Hóa Đơn Bán Hàng

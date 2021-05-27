@@ -1,0 +1,59 @@
+﻿@using DOANLTHDT_1988216.Controllers
+@using DOANLTHDT_1988216.Entities
+
+@{
+    Layout = "_Layout.cshtml";
+    Page.Title = "Xóa hóa đơn nhập hàng";
+
+    c_HoaDonNhapHang c_hdnh = new c_HoaDonNhapHang();
+
+    // Khởi tạo các biến cần thiết
+    HoaDonNhapHang curHD = null;
+    string message = "";
+
+    if (!String.IsNullOrEmpty(Request["id"]))
+    {
+        curHD = c_hdnh.getHoaDonById(Request["id"]);
+
+        if (curHD == null)
+        { message = "Không tìm thấy hóa đơn nhập hàng này để xóa"; }
+        else
+        {
+            message = "Bạn có thực sự muốn xóa hóa đơn nhập hàng <b>" + curHD.MA_HOA_DON + "</b>";
+        }
+
+
+        // Nếu submit dữ liệu
+        if (IsPost)
+        {
+            if (c_hdnh.xoaHoaDon(Request["id"]))
+            {
+                message = "Xóa thành công";
+                Response.Redirect("~/Views/v_DanhSachHoaDonNhapHang.cshtml");
+            }
+            else
+            {
+                message = "Xóa THẤT BẠI";
+            }
+        }
+    }
+    else
+    {
+        message = "Vui lòng chọn loại hàng cần xóa";
+    }
+}
+
+<div>
+    @{ if (curHD != null)
+        {
+            <form action="~/Views/v_XoaHoaDonNhapHang.cshtml?id=@curHD.MA_HOA_DON" method="post">
+                <button class="btn btn-primary" type="submit">Xóa</button>
+            </form>
+        }}
+    @{
+        if (!String.IsNullOrEmpty(message))
+        {
+            <div class="alert alert-info">@Html.Raw(message)</div>
+        }
+    }
+</div>

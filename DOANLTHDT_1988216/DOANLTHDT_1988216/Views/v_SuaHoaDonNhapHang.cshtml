@@ -3,7 +3,7 @@
 
 @{
     Layout = "_Layout.cshtml";
-    Page.Title = "Thêm hóa đơn nhập hàng";
+    Page.Title = "Sửa hóa đơn nhập hàng";
 
     c_MatHang c_MatHang = new c_MatHang();
     c_HoaDonNhapHang c_hdnh = new c_HoaDonNhapHang();
@@ -25,7 +25,8 @@
         // Nếu submit dữ liệu
         if (IsPost)
         {
-            c_hdnh.themHoaDonNhapHang(Request["id_mat_hang"],
+            c_hdnh.suaHoaDonNhapHang(Request["id"],
+                Request["id_mat_hang"],
                 Request["so_luong"],
                 Request["don_gia"],
                 Request["phi_van_chuyen"],
@@ -46,13 +47,15 @@
         <div class="col-md-6">
             @{ if (curHD != null)
                 {
-                    <form action="~/Views/v_ThemHoaDonNhapHang.cshtml" method="post">
+                    <form action="~/Views/v_SuaHoaDonNhapHang.cshtml?id=@curHD.MA_HOA_DON" method="post">
                         <label for="id_mat_hang">Tên mặt hàng</label>
                         <select class="form-control" name="id_mat_hang">
                             @{
                                 foreach (var mh in dsMH)
                                 {
-                                    <option value=@mh.MA_MAT_HANG>@mh.TEN_MAT_HANG</option>
+                                    <option value=@mh.MA_MAT_HANG @{
+                                        if(c_hdnh.getHoaDonById(Request["id"]).MA_MAT_HANG == mh.MA_MAT_HANG) { @Html.Raw("selected");}
+                                    }>@mh.TEN_MAT_HANG</option>
                                 }
                             }
                         </select>

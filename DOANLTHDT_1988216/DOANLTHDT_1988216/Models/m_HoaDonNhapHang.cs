@@ -101,5 +101,68 @@ namespace DOANLTHDT_1988216.Models
 
             return null;
         }
+
+        public bool updateHoaDon(HoaDonNhapHang newHD)
+        {
+            List<HoaDonNhapHang> ds = this.getAllHoaDonNhapHang();
+            bool flag = false;
+            foreach (var d in ds)
+            {
+                if (d.MA_HOA_DON == newHD.MA_HOA_DON)
+                {
+                    // Tìm thấy thì update thông tin mới
+                    d.MA_MAT_HANG = newHD.MA_MAT_HANG;
+                    d.SO_LUONG = newHD.SO_LUONG;
+                    d.DON_GIA = newHD.DON_GIA;
+                    d.PHI_SHIP = newHD.PHI_SHIP;
+                    d.NGAY_NHAP = newHD.NGAY_NHAP;
+                    flag = true;
+                    break;
+                }
+            }
+
+            // Nếu tìm thấy id MatHang này trong DB thì tiến hành update
+            if (flag)
+            {
+                this.writeToFile(ds);
+                return true;
+            }
+            else
+            {
+                // Không thấy thì return false
+                return false;
+            }
+
+        }
+
+        public bool deleteHoaDon(int id)
+        {
+            List<HoaDonNhapHang> ds = this.getAllHoaDonNhapHang();
+            HoaDonNhapHang temp = new HoaDonNhapHang();
+            bool flag = false;
+
+            foreach (var d in ds)
+            {
+                if (d.MA_HOA_DON == id)
+                {
+                    temp = d;
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (flag)
+            {
+                ds.Remove(temp);
+                // Viết lại ra file
+                this.writeToFile(ds);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
