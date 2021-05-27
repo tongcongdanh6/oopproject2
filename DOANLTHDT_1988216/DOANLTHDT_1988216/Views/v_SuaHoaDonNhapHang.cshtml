@@ -1,0 +1,78 @@
+﻿@using DOANLTHDT_1988216.Controllers
+@using DOANLTHDT_1988216.Entities
+
+@{
+    Layout = "_Layout.cshtml";
+    Page.Title = "Thêm hóa đơn nhập hàng";
+
+    c_MatHang c_MatHang = new c_MatHang();
+    c_HoaDonNhapHang c_hdnh = new c_HoaDonNhapHang();
+
+    List<MatHang> dsMH = new List<MatHang>();
+    HoaDonNhapHang curHD = null;
+
+    string message = "";
+
+    if (!String.IsNullOrEmpty(Request["id"]))
+    {
+        curHD = c_hdnh.getHoaDonById(Request["id"]);
+        dsMH = c_MatHang.getDanhSachMatHang();
+
+        if (curHD == null)
+        { message = "Không tìm thấy loại hàng này để cập nhật"; }
+
+
+        // Nếu submit dữ liệu
+        if (IsPost)
+        {
+            c_hdnh.themHoaDonNhapHang(Request["id_mat_hang"],
+                Request["so_luong"],
+                Request["don_gia"],
+                Request["phi_van_chuyen"],
+                Request["ngay_nhap_hang"]);
+
+            Response.Redirect("~/Views/v_DanhSachHoaDonNhapHang.cshtml");
+
+        }
+    }
+    else
+    {
+        message = "Vui lòng chọn hóa đơn nhập hàng cần cập nhật";
+    }
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            @{ if (curHD != null)
+                {
+                    <form action="~/Views/v_ThemHoaDonNhapHang.cshtml" method="post">
+                        <label for="id_mat_hang">Tên mặt hàng</label>
+                        <select class="form-control" name="id_mat_hang">
+                            @{
+                                foreach (var mh in dsMH)
+                                {
+                                    <option value=@mh.MA_MAT_HANG>@mh.TEN_MAT_HANG</option>
+                                }
+                            }
+                        </select>
+                        <label for="so_luong" class="label">Số lượng nhập</label>
+                        <input class="form-control" type="number" name="so_luong" placeholder="Số lượng nhập" value="@curHD.SO_LUONG"/>
+                        <input class="form-control" type="number" name="don_gia" placeholder="Đơn giá" value="@curHD.DON_GIA"/>
+                        <input class="form-control" type="number" name="phi_van_chuyen" placeholder="Phí vận chuyển" value="@curHD.PHI_SHIP"/>
+                        <input class="form-control" type="date" name="ngay_nhap_hang" placeholder="Ngày nhập hàng" value="@curHD.NGAY_NHAP.ToString("yyyy-MM-dd")"/>
+
+                        <button class="btn btn-success" type="submit">Sửa hóa đơn nhập hàng</button>
+                    </form>
+               }
+            }
+
+            @{
+                if (!String.IsNullOrEmpty(message))
+                {
+                    <div class="alert alert-info">@message</div>
+                }
+            }
+        </div>
+    </div>
+</div>

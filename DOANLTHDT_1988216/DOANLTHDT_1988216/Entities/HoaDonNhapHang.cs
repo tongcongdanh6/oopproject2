@@ -14,7 +14,7 @@ namespace DOANLTHDT_1988216.Entities
 
         public DateTime NGAY_NHAP { get; set; }
 
-        public new int TongHoaDon()
+        public override int TongHoaDon()
         {
             return base.TongHoaDon() + this.PHI_SHIP;
         }

@@ -13,3 +13,7 @@
 
 ### Module Hóa Đơn Nhập Hàng
 - Danh sách
+
+## 19:57 27/05/2021
+### Module Hóa Đơn Nhập Hàng
+- Thêm, Tìm kiếm, Sửa (chưa xong)

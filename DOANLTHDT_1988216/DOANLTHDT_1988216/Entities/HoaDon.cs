@@ -7,21 +7,21 @@ namespace DOANLTHDT_1988216.Entities
 {
     public class HoaDon
     {
-        private int _MaHoaDon;
+        protected int _MaHoaDon;
         public int MA_HOA_DON { get; set; }
 
-        private int _MaMatHang;
+        protected int _MaMatHang;
         public int MA_MAT_HANG { get; set; }
 
-        private int _SoLuong;
+        protected int _SoLuong;
         public int SO_LUONG { get; set; }
 
-        private int _DonGia;
+        protected int _DonGia;
         public int DON_GIA { get; set; }
 
-        public int TongHoaDon()
+        public virtual int TongHoaDon()
         {
-            return this._SoLuong * this._DonGia;
+            return this.SO_LUONG * this.DON_GIA;
         }
     }
 }

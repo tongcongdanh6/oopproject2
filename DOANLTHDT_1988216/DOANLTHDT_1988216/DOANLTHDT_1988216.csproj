@@ -121,6 +121,8 @@
     <Content Include="Views\v_SuaLoaiHang.cshtml" />
     <Content Include="Views\v_XoaLoaiHang.cshtml" />
     <Content Include="Views\v_DanhSachHoaDonNhapHang.cshtml" />
+    <Content Include="Views\v_ThemHoaDonNhapHang.cshtml" />
+    <Content Include="Views\v_SuaHoaDonNhapHang.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

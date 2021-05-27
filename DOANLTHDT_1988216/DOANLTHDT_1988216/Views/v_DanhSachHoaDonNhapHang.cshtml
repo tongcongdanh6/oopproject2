@@ -13,7 +13,7 @@
 
     if (Request["keyword"] != null && Request["search_type"] != null)
     {
-        // dsHD = c_HoaDonNhapHang.TimKiemMatHang(Request["keyword"], Request["search_type"]);
+        dsHD = c_HDNH.TimKiemHoaDon(Request["keyword"], Request["search_type"]);
     }
     else
     {
@@ -24,7 +24,7 @@
 <div class="container-fluid">
 
     <div class="row justify-content-center">
-        <form action="~/Views/v_DanhSachMatHang.cshtml" method="get">
+        <form action="~/Views/v_DanhSachHoaDonNhapHang.cshtml" method="get">
             <div class="col">
                 <div class="form-group">
                     <label for="keyword">Nhập từ khóa tìm kiếm:</label>
@@ -35,6 +35,7 @@
                 <div class="form-group">
                     <select name="search_type" class="form-control">
                         <option value="ten_mat_hang">Tên mặt hàng</option>
+                        <option value="ma_hoa_don">Mã hóa đơn</option>
                         <option value="ma_mat_hang">Mã mặt hàng</option>
                     </select>
                     </div>
@@ -59,6 +60,7 @@
                         <th>Đơn giá</th>
                         <th>Phí ship</th>
                         <th>Ngày nhập hàng</th>
+                        <th>Tổng cộng</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -73,8 +75,9 @@
                                 <td>@String.Format("{0:n0} VNĐ", hd.DON_GIA)</td>
                                 <td>@String.Format("{0:n0} VNĐ", hd.PHI_SHIP)</td>
                                 <td>@hd.NGAY_NHAP.ToString("dd/MM/yyyy")</td>
+                                <td>@String.Format("{0:n0} VNĐ", hd.TongHoaDon())</td>
                                 <td>
-                                    <a class="btn btn-primary" href="~/Views/v_SuaMatHang.cshtml?id=@hd.MA_HOA_DON">Sửa</a>
+                                    <a class="btn btn-primary" href="~/Views/v_SuaHoaDonNhapHang.cshtml?id=@hd.MA_HOA_DON">Sửa</a>
                                     <a class="btn btn-danger" href="~/Views/v_XoaMatHang.cshtml?id=@hd.MA_HOA_DON">Xóa</a>
                                 </td>
                             </tr>

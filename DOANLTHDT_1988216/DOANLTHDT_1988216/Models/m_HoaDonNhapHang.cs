@@ -9,6 +9,33 @@ namespace DOANLTHDT_1988216.Models
 {
     public class m_HoaDonNhapHang
     {
+        private void writeToFile(List<HoaDonNhapHang> dsHD)
+        {
+            string filePath = HttpContext.Current.Server.MapPath("~/Models/DB_HoaDonNhapHang.txt");
+            StreamWriter file = new StreamWriter(filePath);
+
+            // Đếm lại tổng hóa đơn
+            int TongHoaDon = dsHD.Count;
+
+            // Cập nhật lại vào file
+            file.WriteLine(TongHoaDon);
+
+            // Cập nhật mặt hàng lại vào file
+            foreach (var m in dsHD)
+            {
+                string textToWrite =
+                    m.MA_HOA_DON + "," +
+                    m.MA_MAT_HANG + "," +
+                    m.SO_LUONG + "," +
+                    m.DON_GIA + "," +
+                    m.PHI_SHIP + "," +
+                    m.NGAY_NHAP;
+
+                file.WriteLine(textToWrite);
+            }
+
+            file.Close();
+        }
         public List<HoaDonNhapHang> getAllHoaDonNhapHang()
         {
             string filePath = HttpContext.Current.Server.MapPath("~/Models/DB_HoaDonNhapHang.txt");
@@ -34,6 +61,45 @@ namespace DOANLTHDT_1988216.Models
             file.Close();
 
             return dsHD;
+        }
+
+        public void addHoaDonNhapHang(HoaDonNhapHang newHD)
+        {
+            // Đọc dữ liệu cũ
+            List<HoaDonNhapHang> dsHD = this.getAllHoaDonNhapHang();
+            int newId = 0;
+            foreach (var m in dsHD)
+            {
+                if (newId < m.MA_HOA_DON)
+                {
+                    newId = m.MA_HOA_DON;
+                }
+            }
+            newId++; // Id mới
+
+            // Update lại id cho parameter truyền vào (giá trị mặc định đang là 0)
+            newHD.MA_HOA_DON = newId;
+
+            // Thêm vào list hiện tại
+            dsHD.Add(newHD);
+
+            // Viết list mới vào file
+            this.writeToFile(dsHD);
+        }
+
+        public HoaDonNhapHang getHoaDonById(int id)
+        {
+            List<HoaDonNhapHang> ds = this.getAllHoaDonNhapHang();
+
+            foreach (var d in ds)
+            {
+                if (d.MA_HOA_DON == id)
+                {
+                    return d;
+                }
+            }
+
+            return null;
         }
     }
 }

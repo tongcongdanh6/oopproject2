@@ -1,0 +1,57 @@
+﻿@using DOANLTHDT_1988216.Controllers
+@using DOANLTHDT_1988216.Entities
+
+@{
+    Layout = "_Layout.cshtml";
+    Page.Title = "Thêm hóa đơn nhập hàng";
+
+    c_MatHang c_MatHang = new c_MatHang();
+    c_HoaDonNhapHang c_hdnh = new c_HoaDonNhapHang();
+    List<MatHang> dsMH = new List<MatHang>();
+
+    if(IsPost)
+    {
+        c_hdnh.themHoaDonNhapHang(Request["id_mat_hang"],
+            Request["so_luong"],
+            Request["don_gia"],
+            Request["phi_van_chuyen"],
+            Request["ngay_nhap_hang"]);
+       
+            Response.Redirect("~/Views/v_DanhSachHoaDonNhapHang.cshtml");
+       
+    }
+    else
+    {
+        dsMH = c_MatHang.getDanhSachMatHang();
+    }
+}
+
+<div class="container">
+    <div class="row justify-content-center py-5">
+        <div class="col-md-6">
+            <h1>Thêm hóa đơn nhập hàng</h1>
+            <hr />
+            <form action="~/Views/v_ThemHoaDonNhapHang.cshtml" method="post">
+                <label for="id_mat_hang">Tên mặt hàng</label>
+                <select class="form-control" name="id_mat_hang">
+                    @{
+                        foreach (var mh in dsMH)
+                        {
+                            <option value=@mh.MA_MAT_HANG>@mh.TEN_MAT_HANG</option>
+                        }
+                    }
+                </select>
+                <label for="so_luong" class="label">Số lượng nhập</label>
+                <input class="form-control" type="number" name="so_luong" placeholder="Số lượng nhập" />
+                <input class="form-control" type="number" name="don_gia" placeholder="Đơn giá" />
+                <input class="form-control" type="number" name="phi_van_chuyen" placeholder="Phí vận chuyển" />
+                <input class="form-control" type="date" name="ngay_nhap_hang" placeholder="Ngày nhập hàng" />
+
+                <button class="btn btn-success" type="submit">Thêm hóa đơn nhập hàng</button>
+            </form>
+            <div>
+                Nếu không tìm thấy mặt hàng bạn cần thêm, vui lòng <a href="~/Views/v_ThemMatHang.cshtml">click vào đây</a> để thêm mặt hàng mới
+            </div>
+        </div>
+    </div>
+</div>
