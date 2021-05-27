@@ -19,3 +19,4 @@
 - Thêm, Tìm kiếm, Sửa, Xóa
 
 ### Module Hóa Đơn Bán Hàng
+- Thêm, Tìm kiếm, Sửa, Xóa

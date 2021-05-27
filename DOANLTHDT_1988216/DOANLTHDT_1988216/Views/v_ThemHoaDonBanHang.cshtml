@@ -1,0 +1,54 @@
+﻿@using DOANLTHDT_1988216.Controllers
+@using DOANLTHDT_1988216.Entities
+
+@{
+    Layout = "_Layout.cshtml";
+    Page.Title = "Thêm hóa đơn bán hàng";
+
+    c_MatHang c_MatHang = new c_MatHang();
+    c_HoaDonBanHang c_HD = new c_HoaDonBanHang();
+    List<MatHang> dsMH = new List<MatHang>();
+
+    if(IsPost)
+    {
+        c_HD.themHoaDonBanHang(Request["id_mat_hang"],
+            Request["so_luong"],
+            Request["don_gia"],
+            Request["phi_van_chuyen"],
+            Request["ngay_nhap_hang"]);
+       
+            Response.Redirect("~/Views/v_DanhSachHoaDonBanHang.cshtml");
+       
+    }
+    else
+    {
+        dsMH = c_MatHang.getDanhSachMatHang();
+    }
+}
+
+<div class="container">
+    <div class="row justify-content-center py-5">
+        <div class="col-md-6">
+            <h1>Thêm hóa đơn bán hàng</h1>
+            <hr />
+            <form action="~/Views/v_ThemHoaDonBanHang.cshtml" method="post">
+                <label for="id_mat_hang">Tên mặt hàng</label>
+                <select class="form-control" name="id_mat_hang">
+                    @{
+                        foreach (var mh in dsMH)
+                        {
+                            <option value=@mh.MA_MAT_HANG>@mh.TEN_MAT_HANG</option>
+                        }
+                    }
+                </select>
+                <label for="so_luong" class="label">Số lượng bán</label>
+                <input class="form-control" type="number" name="so_luong" placeholder="Số lượng bán" />
+                <input class="form-control" type="number" name="don_gia" placeholder="Đơn giá" />
+                <input class="form-control" type="number" name="phi_van_chuyen" placeholder="Phí vận chuyển" />
+                <input class="form-control" type="date" name="ngay_nhap_hang" placeholder="Ngày bán hàng" />
+
+                <button class="btn btn-success" type="submit">Thêm hóa đơn nhập hàng</button>
+            </form>
+        </div>
+    </div>
+</div>

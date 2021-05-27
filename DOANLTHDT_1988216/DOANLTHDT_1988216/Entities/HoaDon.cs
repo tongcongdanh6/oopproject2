@@ -19,6 +19,9 @@ namespace DOANLTHDT_1988216.Entities
         protected int _DonGia;
         public int DON_GIA { get; set; }
 
+        protected int _PhiShip;
+        public int PHI_SHIP { get; set; }
+
         public virtual int TongHoaDon()
         {
             return this.SO_LUONG * this.DON_GIA;

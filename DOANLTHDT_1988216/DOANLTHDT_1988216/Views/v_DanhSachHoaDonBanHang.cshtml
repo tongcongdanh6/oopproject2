@@ -1,0 +1,92 @@
+﻿@using DOANLTHDT_1988216.Controllers
+@using DOANLTHDT_1988216.Entities
+
+@{
+    Layout = "~/Views/_Layout.cshtml";
+    Page.Title = "Danh sách hóa đơn bán hàng";
+
+    c_HoaDonBanHang c_HD = new c_HoaDonBanHang();
+    c_MatHang c_MH = new c_MatHang();
+
+    List<HoaDonBanHang> dsHD = new List<HoaDonBanHang>();
+    List<HoaDonBanHang> result = new List<HoaDonBanHang>();
+
+    if (Request["keyword"] != null && Request["search_type"] != null)
+    {
+        dsHD = c_HD.TimKiemHoaDon(Request["keyword"], Request["search_type"]);
+    }
+    else
+    {
+        dsHD = c_HD.getDanhSachHoaDonBanHang();
+    }
+}
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+        <form action="~/Views/v_DanhSachHoaDonBanHang.cshtml" method="get">
+            <div class="col">
+                <div class="form-group">
+                    <label for="keyword">Nhập từ khóa tìm kiếm:</label>
+                    <input type="text" name="keyword" class="form-control" placeholder="Từ khóa">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <select name="search_type" class="form-control">
+                        <option value="ten_mat_hang">Tên mặt hàng</option>
+                        <option value="ma_hoa_don">Mã hóa đơn</option>
+                        <option value="ma_mat_hang">Mã mặt hàng</option>
+                    </select>
+                    </div>
+                </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            </div>
+        </form>
+    </div>
+
+    
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">Danh sách hóa đơn bán hàng</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Mã</th>
+                        <th>Tên mặt hàng</th>
+                        <th>Số lượng bán</th>
+                        <th>Đơn giá</th>
+                        <th>Phí ship</th>
+                        <th>Ngày bán hàng</th>
+                        <th>Tổng cộng (include VAT 10%)</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var hd in dsHD)
+                        {
+                            <tr>
+                                <td>@hd.MA_HOA_DON</td>
+                                <td>@c_MH.getMatHangById(hd.MA_MAT_HANG.ToString()).TEN_MAT_HANG</td>
+                                <td>@String.Format("{0:n0}", hd.SO_LUONG)</td>
+                                <td>@String.Format("{0:n0} VNĐ", hd.DON_GIA)</td>
+                                <td>@String.Format("{0:n0} VNĐ", hd.PHI_SHIP)</td>
+                                <td>@hd.NGAY_BAN.ToString("dd/MM/yyyy")</td>
+                                <td>@String.Format("{0:n0} VNĐ", hd.TongHoaDon())</td>
+                                <td>
+                                    <a class="btn btn-primary" href="~/Views/v_SuaHoaDonBanHang.cshtml?id=@hd.MA_HOA_DON">Sửa</a>
+                                    <a class="btn btn-danger" href="~/Views/v_XoaHoaDonBanHang.cshtml?id=@hd.MA_HOA_DON">Xóa</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+ 
+</div>
+

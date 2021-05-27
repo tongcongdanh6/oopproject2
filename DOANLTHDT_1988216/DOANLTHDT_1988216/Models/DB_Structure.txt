@@ -6,3 +6,6 @@ id,tên loại hàng
 
 DB_HoaDonNhapHang
 id,id mặt hàng,số lượng,đơn giá,phí vận chuyển,ngày nhập hàng
+
+DB_HoaDonBanHang
+id,id mặt hàng,số lượng,đơn giá,phí vận chuyển,vat,ngày bán hàng

@@ -5,31 +5,31 @@
     Layout = "_Layout.cshtml";
     Page.Title = "Xóa hóa đơn nhập hàng";
 
-    c_HoaDonNhapHang c_hdnh = new c_HoaDonNhapHang();
+    c_HoaDonBanHang c_hd = new c_HoaDonBanHang();
 
     // Khởi tạo các biến cần thiết
-    HoaDonNhapHang curHD = null;
+    HoaDonBanHang curHD = null;
     string message = "";
 
     if (!String.IsNullOrEmpty(Request["id"]))
     {
-        curHD = c_hdnh.getHoaDonById(Request["id"]);
+        curHD = c_hd.getHoaDonById(Request["id"]);
 
         if (curHD == null)
-        { message = "Không tìm thấy hóa đơn nhập hàng này để xóa"; }
+        { message = "Không tìm thấy hóa đơn bán hàng này để xóa"; }
         else
         {
-            message = "Bạn có thực sự muốn xóa hóa đơn nhập hàng <b>" + curHD.MA_HOA_DON + "</b>";
+            message = "Bạn có thực sự muốn xóa hóa đơn bán hàng <b>" + curHD.MA_HOA_DON + "</b>";
         }
 
 
         // Nếu submit dữ liệu
         if (IsPost)
         {
-            if (c_hdnh.xoaHoaDon(Request["id"]))
+            if (c_hd.xoaHoaDon(Request["id"]))
             {
                 message = "Xóa thành công";
-                Response.Redirect("~/Views/v_DanhSachHoaDonNhapHang.cshtml");
+                Response.Redirect("~/Views/v_DanhSachHoaDonBanHang.cshtml");
             }
             else
             {
@@ -39,14 +39,14 @@
     }
     else
     {
-        message = "Vui lòng chọn hóa đơn nhập hàng cần xóa";
+        message = "Vui lòng chọn hóa đơn bán hàng cần xóa";
     }
 }
 
 <div>
     @{ if (curHD != null)
         {
-            <form action="~/Views/v_XoaHoaDonNhapHang.cshtml?id=@curHD.MA_HOA_DON" method="post">
+            <form action="~/Views/v_XoaHoaDonBanHang.cshtml?id=@curHD.MA_HOA_DON" method="post">
                 <button class="btn btn-primary" type="submit">Xóa</button>
             </form>
         }}
