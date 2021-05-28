@@ -1,0 +1,73 @@
+﻿@using DOANLTHDT_1988216.Controllers;
+@using DOANLTHDT_1988216.Entities;
+
+@{
+    Layout = "_Layout.cshtml";
+    Page.Title = "Thống kê";
+    c_ThongKe c_tk = new c_ThongKe();
+    c_LoaiHang c_lh = new c_LoaiHang();
+    c_MatHang c_mh = new c_MatHang();
+
+    List<ThongKe> tk = c_tk.SoLuongHangTheoLoaiHang();
+    List<ThongKe> tk2 = c_tk.SoLuongHangHetHanTheoMatHang();
+}
+
+<div class="container">
+    <div class="row py-5">
+        <div class="col-md-12">
+            <h2>Thống kê số lượng hàng còn lại trong kho theo loại hàng</h2>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Mã loại hàng</th>
+                        <th>Tên loại hàng</th>
+                        <th>Số lượng còn</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var t in tk)
+                        {
+                            <tr>
+                                <td>@t.ID</td>
+                                <td>@c_lh.getLoaiHangById(t.ID.ToString()).TEN_LOAI_HANG</td>
+                                <td>@t.SO_LUONG</td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row py-5">
+        <div class="col-md-12">
+            <h2>Thống kê mặt hàng đã hết hạn - Hôm nay là: @DateTime.Now.ToString("dd-MM-yyyy")</h2>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Mã mặt hàng</th>
+                        <th>Tên mặt hàng</th>
+                        <th>Số lượng hết hạn</th>
+                        <th>Ngày hết hạn</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var t in tk2)
+                        {
+                            <tr>
+                                <td>@t.ID</td>
+                                <td>@c_mh.getMatHangById(t.ID.ToString()).TEN_MAT_HANG</td>
+                                <td>@t.SO_LUONG</td>
+                                <td>@c_mh.getMatHangById(t.ID.ToString()).HAN_SU_DUNG.ToString("dd-MM-yyyy")</td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -20,3 +20,8 @@
 
 ### Module Hóa Đơn Bán Hàng
 - Thêm, Tìm kiếm, Sửa, Xóa
+
+## 10:42 PM 5/28/2021
+### Module Thống Kê
+- Thống kê số lượng hàng theo thể loại hàng
+- Thống kê số lượng hàng hết hạn theo mặt hàng

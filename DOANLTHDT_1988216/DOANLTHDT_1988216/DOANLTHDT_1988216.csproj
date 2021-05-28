@@ -101,11 +101,13 @@
     <Compile Include="Controllers\c_HoaDonNhapHang.cs" />
     <Compile Include="Controllers\c_LoaiHang.cs" />
     <Compile Include="Controllers\c_MatHang.cs" />
+    <Compile Include="Controllers\c_ThongKe.cs" />
     <Compile Include="Entities\HoaDon.cs" />
     <Compile Include="Entities\HoaDonBanHang.cs" />
     <Compile Include="Entities\HoaDonNhapHang.cs" />
     <Compile Include="Entities\LoaiHang.cs" />
     <Compile Include="Entities\MatHang.cs" />
+    <Compile Include="Entities\ThongKe.cs" />
     <Compile Include="Functions\MyUltilities.cs" />
     <Compile Include="Models\m_HoaDonBanHang.cs" />
     <Compile Include="Models\m_HoaDonNhapHang.cs" />
@@ -132,6 +134,7 @@
     <Content Include="Views\v_ThemHoaDonBanHang.cshtml" />
     <Content Include="Views\v_SuaHoaDonBanHang.cshtml" />
     <Content Include="Views\v_XoaHoaDonBanHang.cshtml" />
+    <Content Include="Views\v_ThongKe.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
