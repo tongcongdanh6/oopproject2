@@ -107,7 +107,9 @@
     <Compile Include="Entities\HoaDonNhapHang.cs" />
     <Compile Include="Entities\LoaiHang.cs" />
     <Compile Include="Entities\MatHang.cs" />
+    <Compile Include="Entities\Message.cs" />
     <Compile Include="Entities\ThongKe.cs" />
+    <Compile Include="Functions\Constants.cs" />
     <Compile Include="Functions\MyUltilities.cs" />
     <Compile Include="Models\m_HoaDonBanHang.cs" />
     <Compile Include="Models\m_HoaDonNhapHang.cs" />

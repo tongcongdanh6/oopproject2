@@ -11,12 +11,12 @@ namespace DOANLTHDT_1988216.Controllers
     public class c_HoaDonNhapHang
     {
 
-        private MyUltilities _ultilities;
+        //private MyUltilities _ultilities;
         private m_HoaDonNhapHang _m_HoaDonNhapHang;
         private m_MatHang _m_MatHang;
         public c_HoaDonNhapHang()
         {
-            this._ultilities = new MyUltilities();
+            //this._ultilities = new MyUltilities();
             this._m_HoaDonNhapHang = new m_HoaDonNhapHang();
             this._m_MatHang = new m_MatHang();
         }
@@ -68,7 +68,7 @@ namespace DOANLTHDT_1988216.Controllers
                     {
                         // Kiểm tra tính hợp lệ số nguyên
                         int n = 0;
-                        if (_ultilities.isInt(keyword, ref n))
+                        if (MyUltilities.isInt(keyword, ref n))
                         {
                             if (d.MA_HOA_DON == n)
                             {
@@ -82,7 +82,7 @@ namespace DOANLTHDT_1988216.Controllers
                     {
                         // Kiểm tra tính hợp lệ số nguyên
                         int n = 0;
-                        if (_ultilities.isInt(keyword, ref n))
+                        if (MyUltilities.isInt(keyword, ref n))
                         {
                             if (d.MA_MAT_HANG == n)
                             {

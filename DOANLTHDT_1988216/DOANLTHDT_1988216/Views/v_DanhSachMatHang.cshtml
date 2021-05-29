@@ -22,25 +22,16 @@
 
 <div class="container-fluid">
 
-    <div class="row justify-content-center">
-        <form action="~/Views/v_DanhSachMatHang.cshtml" method="get">
-            <div class="col">
-                <div class="form-group">
-                    <label for="keyword">Nhập từ khóa tìm kiếm:</label>
-                    <input type="text" name="keyword" class="form-control" placeholder="Từ khóa">
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <select name="search_type" class="form-control">
-                        <option value="ten_mat_hang">Tên mặt hàng</option>
-                        <option value="ma_mat_hang">Mã mặt hàng</option>
-                    </select>
-                    </div>
-                </div>
-            <div class="col">
-                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-            </div>
+    <div class="row py-5 justify-content-center">
+        <form class="form-inline" action="~/Views/v_DanhSachMatHang.cshtml" method="get">
+            <label for="keyword">Nhập từ khóa tìm kiếm:</label>
+            <input type="text" name="keyword" class="form-control mr-3" placeholder="Từ khóa">
+            <label for="search_type">Tìm kiếm theo:</label>
+            <select name="search_type" class="form-control mr-3">
+                <option value="ten_mat_hang">Tên mặt hàng</option>
+                <option value="ma_mat_hang">Mã mặt hàng</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
         </form>
     </div>
 

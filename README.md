@@ -25,3 +25,8 @@
 ### Module Thống Kê
 - Thống kê số lượng hàng theo thể loại hàng
 - Thống kê số lượng hàng hết hạn theo mặt hàng
+
+## 2:06 PM 5/29/2021
+### Module THÊM MẶT HÀNG
+- Sử dụng Cookie để lưu tạm dữ liệu người dùng, để người dùng đỡ phải tốn công nhập lại ở phần Frontend nếu như phát sinh validate không thành công
+- Thêm phần validate dữ liệu người dùng nhập rồi thông báo ra ngoài Frontend cho người dùng biết

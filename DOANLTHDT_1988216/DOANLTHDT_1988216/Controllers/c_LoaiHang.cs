@@ -10,11 +10,11 @@ namespace DOANLTHDT_1988216.Controllers
 {
     public class c_LoaiHang
     {
-        private MyUltilities _ultilities;
+        //private MyUltilities _ultilities;
         private m_LoaiHang _m_loaihang;
         public c_LoaiHang()
         {
-            this._ultilities = new MyUltilities();
+            //this._ultilities = new MyUltilities();
             this._m_loaihang = new m_LoaiHang();
         }
         public List<LoaiHang> getDanhSachLoaiHang()
@@ -58,7 +58,7 @@ namespace DOANLTHDT_1988216.Controllers
                     {
                         // Kiểm tra tính hợp lệ số nguyên
                         int n = 0;
-                        if (_ultilities.isInt(keyword, ref n))
+                        if (MyUltilities.isInt(keyword, ref n))
                         {
                             if (lh.MA_LOAI_HANG == n)
                             {
