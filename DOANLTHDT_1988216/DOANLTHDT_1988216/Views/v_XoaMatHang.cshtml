@@ -1,8 +1,10 @@
 ﻿@using DOANLTHDT_1988216.Controllers
 @using DOANLTHDT_1988216.Entities
+@using DOANLTHDT_1988216.Functions
 
 @{
-    Layout = null;
+    Layout = "_Layout.cshtml";
+    Page.Title = "Xóa mặt hàng";
 
     c_MatHang c_MatHang = new c_MatHang();
     c_LoaiHang c_LoaiHang = new c_LoaiHang();
@@ -13,61 +15,74 @@
     // Khởi tạo các biến cần thiết
     List<LoaiHang> dsLH = new List<LoaiHang>();
     MatHang currentMH = null;
-    string message = "";
+
+    // Message lưu kết quả thông báo trả về
+    List<Message> msg = new List<Message>();
 
     if (!String.IsNullOrEmpty(Request["id"]))
     {
         dsLH = c_LoaiHang.getDanhSachLoaiHang();
-        currentMH = c_MatHang.getMatHangById(Request["id"]);
-
-        if (currentMH == null)
-        { message = "Không tìm thấy sản phẩm này để cập nhật"; }
+        if (!int.TryParse(Request["id"], out int r))
+        {
+            msg.Add(new Message("warning", String.Format("{0} {1} {2}", Constants.MA, Constants.MAT_HANG, Constants.KHONG_HOP_LE)));
+        }
         else
         {
-            message = "Bạn có thực sự muốn xóa sản phẩm <b>" + currentMH.TEN_MAT_HANG + "</b>";
+            currentMH = c_MatHang.getMatHangById(Request["id"]);
+        }
+
+        if (currentMH == null)
+        {
+            msg.Add(new Message("warning", String.Format("{0} {1} {2}", Constants.KHONG_TIM_THAY_MAT_HANG, Constants.DE, Constants.XOA)));
+        }
+        else
+        {
+            msg.Add(new Message("warning", String.Format("{0} {1} <b>{2}</b> này?", Constants.BAN_CO_THUC_SU_MUON, Constants.XOA, currentMH.TEN_MAT_HANG)));
         }
 
 
         // Nếu submit dữ liệu
         if (IsPost)
         {
-            if (c_MatHang.xoaMatHang(Request["id"]))
+            msg = c_MatHang.xoaMatHang(Request["id"]);
+
+            if (msg.Count == 1 && msg[0].TYPE == "success")
             {
-                message = "Xóa thành công";
                 Response.Redirect("~/Views/v_DanhSachMatHang.cshtml");
-            }
-            else
-            {
-                message = "Xóa THẤT BẠI";
             }
         }
     }
     else
     {
-        message = "Vui lòng chọn sản phẩm cần xóa";
+        msg.Add(new Message("info", String.Format("{0} {1} {2} {3}",
+        Constants.VUI_LONG_CHON,
+        Constants.MAT_HANG,
+        Constants.DE,
+        Constants.XOA)));
     }
 }
 
-<!DOCTYPE html>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Xóa mặt hàng</h1>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
-</head>
-<body>
-    <div>
-        @{ if(currentMH != null) { 
-        <form action="~/Views/v_XoaMatHang.cshtml?id=@currentMH.MA_MAT_HANG" method="post">
-            <button type="submit">Xóa</button>
-        </form>
-          }}        
-        @{ 
-            if (message != null)
-            {
-                @Html.Raw(message)
+            @{
+                if (msg.Count > 0)
+                {
+                    foreach (var m in msg)
+                    {
+                        <div class="alert alert-@m.TYPE">@Html.Raw(m.CONTENT)</div>
+                    }
+                }
             }
-        }
+
+            @{ if (currentMH != null)
+                {
+                    <form action="~/Views/v_XoaMatHang.cshtml?id=@currentMH.MA_MAT_HANG" method="post">
+                        <button class="btn btn-danger" type="submit">Xóa</button>
+                    </form>
+                }}
+        </div>
     </div>
-</body>
-</html>
+</div>

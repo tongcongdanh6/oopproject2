@@ -15,50 +15,51 @@
     // Khởi tạo các biến cần thiết
     List<LoaiHang> dsLH = new List<LoaiHang>();
     MatHang currentMH = null;
-    Message msg = new Message();
-    string message = "";
+
+    // Message lưu kết quả thông báo trả về
+    List<Message> msg = new List<Message>();
 
     if (!String.IsNullOrEmpty(Request["id"]))
     {
         dsLH = c_LoaiHang.getDanhSachLoaiHang();
-        currentMH = c_MatHang.getMatHangById(Request["id"]);
+        if (!int.TryParse(Request["id"], out int r)){
+            msg.Add(new Message("warning", String.Format("{0} {1} {2}", Constants.MA, Constants.MAT_HANG, Constants.KHONG_HOP_LE)));
+        }
+        else
+        {
+            currentMH = c_MatHang.getMatHangById(Request["id"]);
+        }
 
         if (currentMH == null)
         {
-            msg.TYPE = "danger";
-            msg.CONTENT = String.Format("{0} {1} {2}", Constants.KHONG_TIM_THAY_MAT_HANG, Constants.DE, Constants.CAP_NHAT).ToUpper();
+            msg.Add(new Message("warning", String.Format("{0} {1} {2}", Constants.KHONG_TIM_THAY_MAT_HANG, Constants.DE, Constants.CAP_NHAT)));
         }
 
         // Nếu submit dữ liệu
         if (IsPost)
         {
-            if (c_MatHang.capNhatMatHang(
+            msg = c_MatHang.capNhatMatHang(
                  Request["id"],
                  Request["ten_mat_hang"],
                  Request["nha_sx"],
                  Request["han_sd"],
                  Request["nam_sx"],
                  Request["loai_hang"]
-                 ))
+                 );
+
+            if (msg.Count == 1 && msg[0].TYPE == "success")
             {
-                message = "Cập nhật thành công";
                 Response.Redirect("~/Views/v_DanhSachMatHang.cshtml");
-            }
-            else
-            {
-                message = "Cập nhật THẤT BẠI";
             }
         }
     }
     else
     {
-        msg.TYPE = "info";
-        msg.CONTENT = String.Format("{0} {1} {2} {3}",
+        msg.Add(new Message("info", String.Format("{0} {1} {2} {3}",
             Constants.VUI_LONG_CHON,
             Constants.MAT_HANG,
             Constants.DE,
-            Constants.CAP_NHAT
-            ).ToUpper();
+            Constants.CAP_NHAT)));
     }
 }
 
@@ -66,6 +67,15 @@
     <div class="row py-5 justify-content-center">
         <div class="col-md-6">
             <h1 class="text-center">Cập nhật mặt hàng</h1>
+            @{
+                if (msg.Count > 0)
+                {
+                    foreach (var m in msg)
+                    {
+                        <div class="alert alert-@m.TYPE">@m.CONTENT</div>
+                    }
+                }
+            }
             @{ if (currentMH != null)
                 {
                     <form action="~/Views/v_SuaMatHang.cshtml?id=@currentMH.MA_MAT_HANG" method="post">
@@ -82,19 +92,19 @@
                             @{
                                 foreach (var lh in dsLH)
                                 {
-                                    <option value=@lh.MA_LOAI_HANG @{ if (int.Parse(Request["id"]) == lh.MA_LOAI_HANG) { @Html.Raw("selected")    } }>@lh.TEN_LOAI_HANG</option>
-    }
+                                    <option value=@lh.MA_LOAI_HANG @{ if (int.Parse(Request["id"]) == lh.MA_LOAI_HANG) { @Html.Raw("selected")  } }>@lh.TEN_LOAI_HANG</option>
+                                }
                             }
                         </select>
                         <div class="text-center py-3">
                             <button class="btn btn-primary" type="submit">Sửa mặt hàng</button>
                         </div>
                     </form>
-    }}
+                }}
             @{
                 if (msg != null)
                 {
-                    <div class="alert alert-@msg.TYPE">@msg.CONTENT</div>
+                    
                 }
             }
         </div>

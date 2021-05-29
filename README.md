@@ -30,3 +30,7 @@
 ### Module THÊM MẶT HÀNG
 - Sử dụng Cookie để lưu tạm dữ liệu người dùng, để người dùng đỡ phải tốn công nhập lại ở phần Frontend nếu như phát sinh validate không thành công
 - Thêm phần validate dữ liệu người dùng nhập rồi thông báo ra ngoài Frontend cho người dùng biết
+
+## 11:11 PM 5/29/2021
+### Module SỬA, XÓA MẶT HÀNG
+- Thêm validate dữ liệu người dùng rồi hiển thị ra ngoài Frontend

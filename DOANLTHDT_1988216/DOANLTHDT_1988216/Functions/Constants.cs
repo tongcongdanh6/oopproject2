@@ -11,13 +11,17 @@ namespace DOANLTHDT_1988216.Functions
         public const string DE = "để";
         public const string CAP_NHAT = "cập nhật";
         public const string THANH_CONG = "thành công";
+        public const string THAT_BAI = "thất bại";
         public const string VUI_LONG_CHON = "vui lòng chọn";
         public const string MAT_HANG = "mặt hàng";
+        public const string MA = "mã";
         public const string CONG_TY_SX = "công ty sản xuất";
         public const string TEN = "tên";
         public const string THEM = "thêm";
+        public const string XOA = "xóa";
         public const string HAN_SD = "hạn sử dụng";
         public const string NAM_SX = "năm sản xuất";
+        public const string BAN_CO_THUC_SU_MUON = "bạn có thực sự muốn";
 
         // ERRORS MESSAGE
 

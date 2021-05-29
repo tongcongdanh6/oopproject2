@@ -20,40 +20,18 @@ namespace DOANLTHDT_1988216.Controllers
             this._m_mathang = new m_MatHang();
         }
 
-        public List<MatHang> getDanhSachMatHang()
+        private List<Message> validateUserInput(string id, string TenMatHang, string HanSD, string CongTySX, string NamSX, string LoaiHang)
         {
-            m_MatHang m_MatHang = new m_MatHang();
-
-            return m_MatHang.getAllMatHang();
-        }
-
-        public List<Message> themSanPham(string TenMatHang, string HanSD, string CongTySX, string NamSX, string LoaiHang)
-        {
-            // Khởi tạo list message kết quả
             List<Message> listMsg = new List<Message>();
 
-            // Lưu dữ liệu người dùng vừa nhập qua Cookie để giữ lại trên FrontEnd cho đỡ phải nhập lại
-            var dictionary = new Dictionary<string, string> {
-                {"TenMatHang", TenMatHang},
-                {"HanSD", HanSD},
-                {"CongTySX", CongTySX},
-                {"NamSX", NamSX},
-                {"LoaiHang", LoaiHang}
-            };
-            foreach(var d in dictionary)
+            if (String.IsNullOrEmpty(id))
             {
-                HttpCookie cookieItem = new HttpCookie(d.Key);
-                cookieItem.Value = d.Value;
-                cookieItem.Expires.AddSeconds(30);
-                HttpContext.Current.Response.Cookies.Set(cookieItem);
+                listMsg.Add(new Message("danger", String.Format("{0} {1} {2}", Constants.MA, Constants.MAT_HANG, Constants.KHONG_DUOC_RONG)));
             }
-
-
-            // ======= VALIDATION =========
-            // Biến cờ cho kết quả validate dữ liệu
-            bool isValidData = false;
-
-            // Kiểm tra nếu có ký tự đặc biệt trong Tên Mặt Hàng hay Công Ty SX thì trả message lỗi
+            else if (!int.TryParse(id, out int n))
+            {
+                listMsg.Add(new Message("danger", String.Format("{0} {1} {2}", Constants.MA, Constants.MAT_HANG, Constants.KHONG_HOP_LE)));
+            }
 
             if (String.IsNullOrEmpty(TenMatHang))
             {
@@ -99,7 +77,7 @@ namespace DOANLTHDT_1988216.Controllers
                 listMsg.Add(msg);
             }
 
-            if(String.IsNullOrEmpty(HanSD))
+            if (String.IsNullOrEmpty(HanSD))
             {
                 Message msg = new Message();
                 msg.TYPE = "danger";
@@ -109,7 +87,7 @@ namespace DOANLTHDT_1988216.Controllers
                     );
                 listMsg.Add(msg);
             }
-            else if(DateTime.Parse(HanSD) < DateTime.Now)
+            else if (DateTime.Parse(HanSD) < DateTime.Now)
             {
                 Message msg = new Message();
                 msg.TYPE = "warning";
@@ -145,9 +123,44 @@ namespace DOANLTHDT_1988216.Controllers
                 listMsg.Add(msg);
             }
 
+            return listMsg;
+        }
+
+        public List<MatHang> getDanhSachMatHang()
+        {
+            m_MatHang m_MatHang = new m_MatHang();
+
+            return m_MatHang.getAllMatHang();
+        }
+
+        public List<Message> themSanPham(string id, string TenMatHang, string HanSD, string CongTySX, string NamSX, string LoaiHang)
+        {
+            // Lưu dữ liệu người dùng vừa nhập qua Cookie để giữ lại trên FrontEnd cho đỡ phải nhập lại
+            var dictionary = new Dictionary<string, string> {
+                {"TenMatHang", TenMatHang},
+                {"HanSD", HanSD},
+                {"CongTySX", CongTySX},
+                {"NamSX", NamSX},
+                {"LoaiHang", LoaiHang}
+            };
+            foreach(var d in dictionary)
+            {
+                HttpCookie cookieItem = new HttpCookie(d.Key);
+                cookieItem.Value = d.Value;
+                cookieItem.Expires.AddSeconds(30);
+                HttpContext.Current.Response.Cookies.Set(cookieItem);
+            }
+
+
+            // ======= VALIDATION =========
+            // Biến cờ cho kết quả validate dữ liệu
+            bool isValidData = false;
+
+            // List message validate
+            List<Message> listMsg = this.validateUserInput(id, TenMatHang, HanSD, CongTySX, NamSX, LoaiHang);
             if(listMsg.Count == 0)
             {
-                isValidData = true;
+                isValidData = true; // Validate dữ liệu thành công
             }
 
             // ======= VALIDATION =========
@@ -161,7 +174,7 @@ namespace DOANLTHDT_1988216.Controllers
 
                 // Thêm
                 MatHang mh = new MatHang();
-                mh.MA_MAT_HANG = 0; // Gán Default;
+                mh.MA_MAT_HANG = int.Parse(id); // Gán Default;
                 mh.TEN_MAT_HANG = TenMatHang;
                 mh.HAN_SU_DUNG = Han_SD;
                 mh.CONG_TY_SX = CongTySX;
@@ -222,29 +235,86 @@ namespace DOANLTHDT_1988216.Controllers
             return _m_mathang.getMatHangById(int.Parse(id));
         }
 
-        public bool capNhatMatHang(string id, string TenMH, string NhaSX, string HanSD, string NamSX, string LoaiHang)
+        public List<Message> capNhatMatHang(string id, string TenMatHang, string CongTySX, string HanSD, string NamSX, string LoaiHang)
         {
-            // Convert dữ liệu
-            DateTime Han_SD = DateTime.Parse(HanSD);
-            DateTime Nam_SX = DateTime.Parse(NamSX);
-            int Loai_Hang = int.Parse(LoaiHang);
+            // ======= VALIDATION =========
+            // Biến cờ cho kết quả validate dữ liệu
+            bool isValidData = false;
 
-            // Tạo Object Mặt Hàng cần update
-            MatHang mh = new MatHang();
-            mh.MA_MAT_HANG = int.Parse(id);
-            mh.TEN_MAT_HANG = TenMH;
-            mh.HAN_SU_DUNG = Han_SD;
-            mh.CONG_TY_SX = NhaSX;
-            mh.NAM_SX = Nam_SX;
-            mh.LOAI_HANG = Loai_Hang;
+            // List message validate
+            List<Message> listMsg = this.validateUserInput(id, TenMatHang, HanSD, CongTySX, NamSX, LoaiHang);
+            if (listMsg.Count == 0)
+            {
+                isValidData = true; // Validate dữ liệu thành công
+            }
 
-           
-            return _m_mathang.updateMatHang(mh);
+            // ======= VALIDATION =========
+
+            if(isValidData == true)
+            {
+                // Convert dữ liệu
+                DateTime Han_SD = DateTime.Parse(HanSD);
+                DateTime Nam_SX = DateTime.Parse(NamSX);
+                int Loai_Hang = int.Parse(LoaiHang);
+
+                // Tạo Object Mặt Hàng cần update
+                MatHang mh = new MatHang();
+                mh.MA_MAT_HANG = int.Parse(id);
+                mh.TEN_MAT_HANG = TenMatHang;
+                mh.HAN_SU_DUNG = Han_SD;
+                mh.CONG_TY_SX = CongTySX;
+                mh.NAM_SX = Nam_SX;
+                mh.LOAI_HANG = Loai_Hang;
+
+                if(_m_mathang.updateMatHang(mh))
+                {
+                    Message msg = new Message();
+                    msg.TYPE = "success";
+                    msg.CONTENT = String.Format("{0} {1} {2}",
+                        Constants.THEM,
+                        Constants.MAT_HANG,
+                        Constants.THANH_CONG).ToUpper();
+                    listMsg.Add(msg);
+                }
+                else
+                {
+                    Message msg = new Message();
+                    msg.TYPE = "success";
+                    msg.CONTENT = String.Format("{0} {1} {2}",
+                        Constants.THEM,
+                        Constants.MAT_HANG,
+                        Constants.THAT_BAI).ToUpper();
+                    listMsg.Add(msg);
+                }
+            }
+            return listMsg;
         }
 
-        public bool xoaMatHang(string id)
+        public List<Message> xoaMatHang(string id)
         {
-            return _m_mathang.deleteMatHang(int.Parse(id));
+            List<Message> listMsg = new List<Message>();
+            if (_m_mathang.deleteMatHang(int.Parse(id)))
+            {
+                Message msg = new Message();
+                msg.TYPE = "success";
+                msg.CONTENT = String.Format("{0} {1} {2}",
+                    Constants.XOA,
+                    Constants.MAT_HANG,
+                    Constants.THANH_CONG).ToUpper();
+                listMsg.Add(msg);
+            }
+            else
+            {
+                Message msg = new Message();
+                msg.TYPE = "danger";
+                msg.CONTENT = String.Format("{0} {1} {2}",
+                    Constants.XOA,
+                    Constants.MAT_HANG,
+                    Constants.THAT_BAI).ToUpper();
+                listMsg.Add(msg);
+            }
+
+            return listMsg;
         }
 
 

@@ -10,8 +10,13 @@ namespace DOANLTHDT_1988216.Entities
         // Constructor
         public Message()
         {
-            this.TYPE = null;
-            this.CONTENT = null;
+            this.TYPE = "";
+            this.CONTENT = "";
+        }
+        public Message(string type, string content)
+        {
+            this.TYPE = type;
+            this.CONTENT = content;
         }
         public string TYPE { set; get; }
 

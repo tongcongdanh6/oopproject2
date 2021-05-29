@@ -10,11 +10,12 @@
 
     // Message lưu kết quả thông báo trả về
     List<Message> msg = new List<Message>();
-    msg = null;
 
     if (IsPost)
     {
-        msg = c_MatHang.themSanPham(Request["ten_mat_hang"],
+        msg = c_MatHang.themSanPham(
+            "0",
+            Request["ten_mat_hang"],
             Request["han_sd"],
             Request["nha_sx"],
             Request["nam_sx"],
@@ -38,7 +39,7 @@
         <div class="col-md-6">
             <h1 class="text-center">Thêm mặt hàng mới</h1>
             @{
-                if (msg != null)
+                if (msg.Count > 0)
                 {
                     foreach (var m in msg)
                     {
