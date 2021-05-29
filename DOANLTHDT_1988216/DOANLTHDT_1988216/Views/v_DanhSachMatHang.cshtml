@@ -63,7 +63,14 @@
                                 <td>@mh.HAN_SU_DUNG.ToString("dd/MM/yyyy")</td>
                                 <td>@mh.NAM_SX.ToString("dd/MM/yyyy")</td>
                                 <td>@{
-                                        @c_LoaiHang.getLoaiHangById(mh.LOAI_HANG.ToString()).TEN_LOAI_HANG;
+                                    if(mh.LOAI_HANG == 0)
+                                    {
+                                        @Html.Raw("<b>Chưa phân loại</b>")
+                                    }
+                                    else
+                                    {
+                                        @c_LoaiHang.getLoaiHangById(mh.LOAI_HANG.ToString()).TEN_LOAI_HANG
+                                    }
                                     }</td>
                                 <td>
                                     <a class="btn btn-primary" href="~/Views/v_SuaMatHang.cshtml?id=@mh.MA_MAT_HANG">Sửa</a>

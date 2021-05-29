@@ -19,13 +19,14 @@ namespace DOANLTHDT_1988216.Entities
                 // Kiểm tra phải số nguyên hợp lệ hay không
                 if (int.TryParse(value.ToString(), out int n))
                 {
-                    // Nếu là số nguyên thì kiểm tra tiếp phải là số > 0 thì mới set
-                    if (n > 0) this._MaLoaiHang = n;
-                    else this._MaLoaiHang = 1;
+                    // Nếu là số nguyên thì kiểm tra tiếp phải là số >= 0 thì mới set
+                    // 0 là CHƯA PHÂN LOẠI
+                    if (n >= 0) this._MaLoaiHang = n;
+                    else this._MaLoaiHang = 0;
                 }
                 else
                 {
-                    this._MaLoaiHang = 1;
+                    this._MaLoaiHang = 0;
                 }
             }
         }

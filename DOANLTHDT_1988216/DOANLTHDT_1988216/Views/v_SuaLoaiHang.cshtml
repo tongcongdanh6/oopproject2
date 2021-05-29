@@ -1,5 +1,6 @@
 ﻿@using DOANLTHDT_1988216.Controllers
 @using DOANLTHDT_1988216.Entities
+@using DOANLTHDT_1988216.Functions
 
 @{
     Layout = "_Layout.cshtml";
@@ -14,55 +15,76 @@
     // Khởi tạo các biến cần thiết
     List<LoaiHang> dsLH = new List<LoaiHang>();
     LoaiHang currentLH = null;
-    string message = "";
+
+    // Message lưu kết quả thông báo trả về
+    List<Message> msg = new List<Message>();
 
     if (!String.IsNullOrEmpty(Request["id"]))
     {
-        currentLH = c_LoaiHang.getLoaiHangById(Request["id"]);
+
+
+        if (!int.TryParse(Request["id"], out int r))
+        {
+            msg.Add(new Message("warning", String.Format("{0} {1} {2}", Constants.MA, Constants.LOAI_HANG, Constants.KHONG_HOP_LE)));
+        }
+        else
+        {
+            currentLH = c_LoaiHang.getLoaiHangById(Request["id"]);
+        }
+
 
         if (currentLH == null)
-        { message = "Không tìm thấy loại hàng này để cập nhật"; }
+        {
+            msg.Add(new Message("warning", String.Format("{0} {1} {2}", Constants.KHONG_TIM_THAY_LOAI_HANG, Constants.DE, Constants.CAP_NHAT)));
+        }
 
 
         // Nếu submit dữ liệu
         if (IsPost)
         {
-            if (c_LoaiHang.capNhatLoaiHang(
+            msg = c_LoaiHang.capNhatLoaiHang(
                  Request["id"],
                  Request["ten_loai_hang"]
-                 ))
+                 );
+
+
+            if (msg.Count == 1 && msg[0].TYPE == "success")
             {
-                message = "Cập nhật thành công";
                 Response.Redirect("~/Views/v_DanhSachLoaiHang.cshtml");
             }
-            else
-            {
-                message = "Cập nhật THẤT BẠI";
-            }
         }
+
     }
     else
     {
-        message = "Vui lòng chọn loại hàng cần cập nhật";
+        msg.Add(new Message("info", String.Format("{0} {1} {2} {3}",
+        Constants.VUI_LONG_CHON,
+        Constants.LOAI_HANG,
+        Constants.DE,
+        Constants.CAP_NHAT)));
     }
 }
 <div class="container">
-    <div class="row">
+    <div class="row py-5 justify-content-center">
         <div class="col-md-6">
+            <h1>@Page.Title</h1>
+            @{
+                if (msg.Count > 0)
+                {
+                    foreach (var m in msg)
+                    {
+                        <div class="alert alert-@m.TYPE">@m.CONTENT</div>
+                    }
+                }
+            }
+
             @{ if (currentLH != null)
                 {
                     <form action="~/Views/v_SuaLoaiHang.cshtml?id=@currentLH.MA_LOAI_HANG" method="post">
                         <label for="ten_loai_hang">Tên loại hàng:</label>
-                        <input type="text" class="form-control" name="ten_loai_hang" placeholder="Tên loại hàng" value="@currentLH.TEN_LOAI_HANG" />
+                        <input type="text" class="form-control mb-3" name="ten_loai_hang" placeholder="Tên loại hàng" value="@currentLH.TEN_LOAI_HANG" />
                         <button type="submit" class="btn btn-primary">Sửa loại hàng</button>
                     </form>
-                }
-            }
-
-            @{
-                if (!String.IsNullOrEmpty(message))
-                {
-                   <div class="alert alert-info">@message</div>
                 }
             }
         </div>

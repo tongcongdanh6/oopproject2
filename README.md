@@ -34,3 +34,11 @@
 ## 11:11 PM 5/29/2021
 ### Module SỬA, XÓA MẶT HÀNG
 - Thêm validate dữ liệu người dùng rồi hiển thị ra ngoài Frontend
+
+## 3:16 AM 5/30/2021
+### Module THÊM, SỬA, XÓA LOẠI HÀNG
+- Validate dữ liệu trước khi thêm
+- Kiểm tra mặt hàng có thuộc loại hàng đang cần xóa hay không, nếu có thì update giá trị loại hàng của các mặt hàng này về "Chưa phân loại"
+
+### Module THÊM HÓA ĐƠN NHẬP HÀNG
+- Validate dữ liệu trước khi thêm

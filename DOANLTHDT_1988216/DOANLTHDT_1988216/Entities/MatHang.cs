@@ -107,13 +107,14 @@ namespace DOANLTHDT_1988216.Entities
                 // Kiểm tra phải số nguyên hợp lệ hay không
                 if (int.TryParse(value.ToString(), out int n))
                 {
-                    // Nếu là số nguyên thì kiểm tra tiếp phải là số > 0 thì mới set
-                    if (n > 0) this._LoaiHang = n;
-                    else this._LoaiHang = 1;
+                    // Nếu là số nguyên thì kiểm tra tiếp phải là số >= 0 thì mới set
+                    // 0 là CHƯA PHÂN LOẠI
+                    if (n >=0) this._LoaiHang = n;
+                    else this._LoaiHang = 0;
                 }
                 else
                 {
-                    this._LoaiHang = 1;
+                    this._LoaiHang = 0;
                 }
             }
         }

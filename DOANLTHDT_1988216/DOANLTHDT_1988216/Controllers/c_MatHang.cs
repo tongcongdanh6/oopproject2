@@ -12,11 +12,9 @@ namespace DOANLTHDT_1988216.Controllers
 {
     public class c_MatHang
     {
-        //private MyUltilities _ultilities;
         private m_MatHang _m_mathang;
         public c_MatHang()
         {
-            //this._ultilities = new MyUltilities();
             this._m_mathang = new m_MatHang();
         }
 
@@ -315,6 +313,11 @@ namespace DOANLTHDT_1988216.Controllers
             }
 
             return listMsg;
+        }
+
+        public List<MatHang> getListMatHangThuocLoaiHang(string id)
+        {
+            return _m_mathang.getListMatHangByLoaiHangId(int.Parse(id));
         }
 
 

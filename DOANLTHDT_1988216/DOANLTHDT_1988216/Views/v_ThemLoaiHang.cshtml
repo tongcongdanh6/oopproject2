@@ -2,34 +2,41 @@
 @using DOANLTHDT_1988216.Entities
 
 @{
-    Layout = null;
+    Layout = "_Layout.cshtml";
+    Page.Title = "Thêm loại hàng";
     c_LoaiHang c_LoaiHang = new c_LoaiHang();
     c_MatHang c_MatHang = new c_MatHang();
     List<LoaiHang> dsLH = c_LoaiHang.getDanhSachLoaiHang();
 
-    if(IsPost)
+    List<Message> msg = new List<Message>();
+
+    if (IsPost)
     {
-        c_LoaiHang.themLoaiHang(Request["ten_loai_hang"]);
-       
-        Response.Redirect("~/Views/v_DanhSachLoaiHang.cshtml");
-       
+        msg = c_LoaiHang.themLoaiHang("0", Request["ten_loai_hang"]);
+
+        if(msg.Count == 1 && msg[0].TYPE == "success")
+        {
+            Response.Redirect("~/Views/v_DanhSachLoaiHang.cshtml");
+        }
     }
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
-</head>
-<body>
-    <div>
-    <form action="~/Views/v_ThemLoaiHang.cshtml" method="post">
-        <input type="text" name="ten_loai_hang" placeholder="Tên loại hàng" />
-        <button type="submit">Thêm loại hàng</button>
-    </form>
+<div class="container">
+    <div class="row py-5 justify-content-center">
+        <div class="col-md-6">
+            <h1>@Page.Title</h1>
+            @{
+                if (msg.Count > 0)
+                {
+                    foreach (var m in msg)
+                    {
+                        <div class="alert alert-@m.TYPE">@m.CONTENT</div>
+                    }
+                }
+            }
+            <form action="~/Views/v_ThemLoaiHang.cshtml" method="post">
+                <input class="form-control mb-3" type="text" name="ten_loai_hang" placeholder="Tên loại hàng" />
+                <button class="btn btn-success" type="submit">@Page.Title</button>
+            </form>
+        </div>
     </div>
-
-</body>
-</html>
+</div>

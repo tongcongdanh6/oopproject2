@@ -10,7 +10,7 @@ namespace DOANLTHDT_1988216.Models
     public class m_MatHang
     {
 
-        private void writeToFile(List<MatHang> dsMH)
+        public void writeToFile(List<MatHang> dsMH)
         {
             string filePath = HttpContext.Current.Server.MapPath("~/Models/DB_MatHang.txt");
             StreamWriter file = new StreamWriter(filePath);
@@ -112,6 +112,21 @@ namespace DOANLTHDT_1988216.Models
                 }
             }
             return null;
+        }
+
+        public List<MatHang> getListMatHangByLoaiHangId(int idLH)
+        {
+            List<MatHang> ds = this.getAllMatHang();
+            List<MatHang> res = new List<MatHang>();
+            foreach(var d in ds)
+            {
+                if(d.LOAI_HANG == idLH)
+                {
+                    res.Add(d);
+                }
+            }
+
+            return res;
         }
 
         public bool updateMatHang(MatHang newMH)

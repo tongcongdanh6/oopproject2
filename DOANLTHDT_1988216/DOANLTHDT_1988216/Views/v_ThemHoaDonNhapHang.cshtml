@@ -7,22 +7,24 @@
 
     c_MatHang c_MatHang = new c_MatHang();
     c_HoaDonNhapHang c_hdnh = new c_HoaDonNhapHang();
-    List<MatHang> dsMH = new List<MatHang>();
+    List<MatHang> dsMH = c_MatHang.getDanhSachMatHang();
 
-    if(IsPost)
+    // Message lưu kết quả thông báo trả về
+    List<Message> msg = new List<Message>();
+
+    if (IsPost)
     {
-        c_hdnh.themHoaDonNhapHang(Request["id_mat_hang"],
+        msg = c_hdnh.themHoaDonNhapHang("0",Request["id_mat_hang"],
             Request["so_luong"],
             Request["don_gia"],
             Request["phi_van_chuyen"],
             Request["ngay_nhap_hang"]);
-       
+
+        if (msg.Count == 1 && msg[0].TYPE == "success")
+        {
             Response.Redirect("~/Views/v_DanhSachHoaDonNhapHang.cshtml");
-       
-    }
-    else
-    {
-        dsMH = c_MatHang.getDanhSachMatHang();
+        }
+
     }
 }
 
@@ -30,22 +32,35 @@
     <div class="row justify-content-center py-5">
         <div class="col-md-6">
             <h1>Thêm hóa đơn nhập hàng</h1>
-            <hr />
+            @{
+                if (msg.Count > 0)
+                {
+                    foreach (var m in msg)
+                    {
+                        <div class="alert alert-@m.TYPE">@m.CONTENT</div>
+                    }
+                }
+            }
             <form action="~/Views/v_ThemHoaDonNhapHang.cshtml" method="post">
                 <label for="id_mat_hang">Tên mặt hàng</label>
                 <select class="form-control" name="id_mat_hang">
                     @{
                         foreach (var mh in dsMH)
                         {
-                            <option value=@mh.MA_MAT_HANG>@mh.TEN_MAT_HANG</option>
+                            <option value=@mh.MA_MAT_HANG @{
+                                if(Response.Cookies["idMatHang"].Value == mh.MA_MAT_HANG.ToString())
+                                {
+                                    @Html.Raw("selected")
+                                }
+                            }>@mh.TEN_MAT_HANG</option>
                         }
                     }
                 </select>
                 <label for="so_luong" class="label">Số lượng nhập</label>
-                <input class="form-control" type="number" name="so_luong" placeholder="Số lượng nhập" />
-                <input class="form-control" type="number" name="don_gia" placeholder="Đơn giá" />
-                <input class="form-control" type="number" name="phi_van_chuyen" placeholder="Phí vận chuyển" />
-                <input class="form-control" type="date" name="ngay_nhap_hang" placeholder="Ngày nhập hàng" />
+                <input class="form-control" type="number" name="so_luong" placeholder="Số lượng nhập" value="@Response.Cookies["SoLuong"].Value"/>
+                <input class="form-control" type="number" name="don_gia" placeholder="Đơn giá" value="@Response.Cookies["DonGia"].Value"/>
+                <input class="form-control" type="number" name="phi_van_chuyen" placeholder="Phí vận chuyển" value="@Response.Cookies["PhiVanChuyen"].Value"/>
+                <input class="form-control" type="date" name="ngay_nhap_hang" placeholder="Ngày nhập hàng" value="@Response.Cookies["NgayNhap"].Value"/>
 
                 <button class="btn btn-success" type="submit">Thêm hóa đơn nhập hàng</button>
             </form>

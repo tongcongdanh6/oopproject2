@@ -70,7 +70,12 @@
                         {
                             <tr>
                                 <td>@hd.MA_HOA_DON</td>
-                                <td>@c_MH.getMatHangById(hd.MA_MAT_HANG.ToString()).TEN_MAT_HANG</td>
+                                <td>@{
+                                    if(c_MH.getMatHangById(hd.MA_MAT_HANG.ToString()) != null)
+                                    {
+                                        @c_MH.getMatHangById(hd.MA_MAT_HANG.ToString()).TEN_MAT_HANG
+                                    }
+                                }</td>
                                 <td>@String.Format("{0:n0}", hd.SO_LUONG)</td>
                                 <td>@String.Format("{0:n0} VNĐ", hd.DON_GIA)</td>
                                 <td>@String.Format("{0:n0} VNĐ", hd.PHI_SHIP)</td>

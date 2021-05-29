@@ -10,7 +10,7 @@ namespace DOANLTHDT_1988216.Models
     public class m_LoaiHang
     {
 
-        private void writeToFile(List<LoaiHang> dsLH)
+        public void writeToFile(List<LoaiHang> dsLH)
         {
             string filePath = HttpContext.Current.Server.MapPath("~/Models/DB_LoaiHang.txt");
             StreamWriter file = new StreamWriter(filePath);
@@ -123,6 +123,26 @@ namespace DOANLTHDT_1988216.Models
         public bool deleteLoaiHang(int id)
         {
             List<LoaiHang> dsLH = this.getAllLoaiHang();
+            m_MatHang m_mh = new m_MatHang();
+
+            // Lấy danh sách mặt hàng thuộc thể loại hàng cần xóa
+            List<MatHang> dsMHThuocLoaiHang = m_mh.getListMatHangByLoaiHangId(id);
+
+
+            // Nếu tồn tại ít nhất 1 mặt hàng trong thể loại này thì tiến hành duyệt mảng
+            if(dsMHThuocLoaiHang.Count > 0)
+            {
+                // Loop duyệt ds mặt hàng để đưa giá trị loại hàng = 0 nếu như mặt hàng này thuộc thể loại cần xóa
+                foreach(var d in dsMHThuocLoaiHang)
+                {
+                    d.LOAI_HANG = 0;
+                    m_mh.updateMatHang(d);
+                }
+            }
+
+            List<MatHang> res = dsMHThuocLoaiHang;
+
+            // Xóa loại hàng
             LoaiHang temp = new LoaiHang();
             bool flag = false;
 
