@@ -9,7 +9,7 @@ namespace DOANLTHDT_1988216.Models
 {
     public class m_HoaDonNhapHang
     {
-        private void writeToFile(List<HoaDonNhapHang> dsHD)
+        public void writeToFile(List<HoaDonNhapHang> dsHD)
         {
             string filePath = HttpContext.Current.Server.MapPath("~/Models/DB_HoaDonNhapHang.txt");
             StreamWriter file = new StreamWriter(filePath);

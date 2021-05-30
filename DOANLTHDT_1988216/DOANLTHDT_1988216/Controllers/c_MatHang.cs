@@ -13,8 +13,12 @@ namespace DOANLTHDT_1988216.Controllers
     public class c_MatHang
     {
         private m_MatHang _m_mathang;
+        private m_HoaDonNhapHang _m_HoaDonNhapHang;
+        private m_HoaDonBanHang _m_HoaDonBanHang;
         public c_MatHang()
         {
+            this._m_HoaDonNhapHang = new m_HoaDonNhapHang();
+            this._m_HoaDonBanHang = new m_HoaDonBanHang();
             this._m_mathang = new m_MatHang();
         }
 
@@ -290,6 +294,32 @@ namespace DOANLTHDT_1988216.Controllers
 
         public List<Message> xoaMatHang(string id)
         {
+            // Tiến hành xóa các mặt hàng có trong hóa đơn bán hàng & hóa đơn nhập hàng
+            List<HoaDonBanHang> listHDBH_byMH = _m_HoaDonBanHang.getListHDBanHangByMatHangID(int.Parse(id));
+            List<HoaDonNhapHang> listHDNH_byMH = _m_HoaDonNhapHang.getListHDNhapHangByMatHangID(int.Parse(id));
+
+            if(listHDBH_byMH.Count > 0 && listHDNH_byMH.Count > 0)
+            {
+                // Full list
+                List<HoaDonBanHang> listHDBH = _m_HoaDonBanHang.getAllHoaDonBanHang();
+                List<HoaDonNhapHang> listHDNH = _m_HoaDonNhapHang.getAllHoaDonNhapHang();
+
+                //Remove from full list
+                foreach (var l in listHDBH_byMH)
+                {
+                    HoaDonBanHang itemToRemove = listHDBH.Single(r => r.MA_HOA_DON == l.MA_HOA_DON);
+                    listHDBH.Remove(itemToRemove);
+                }
+                foreach (var l in listHDNH_byMH)
+                {
+                    HoaDonNhapHang itemToRemove = listHDNH.Single(r => r.MA_HOA_DON == l.MA_HOA_DON);
+                    listHDNH.Remove(itemToRemove);
+                }
+
+                _m_HoaDonBanHang.writeToFile(listHDBH);
+                _m_HoaDonNhapHang.writeToFile(listHDNH);
+            }
+
             List<Message> listMsg = new List<Message>();
             if (_m_mathang.deleteMatHang(int.Parse(id)))
             {
