@@ -12,10 +12,12 @@ namespace DOANLTHDT_1988216.Controllers
     {
 
         private m_HoaDonNhapHang _m_HoaDonNhapHang;
+        private m_HoaDonBanHang _m_HoaDonBanHang;
         private m_MatHang _m_MatHang;
         public c_HoaDonNhapHang()
         {
             this._m_HoaDonNhapHang = new m_HoaDonNhapHang();
+            this._m_HoaDonBanHang = new m_HoaDonBanHang();
             this._m_MatHang = new m_MatHang();
         }
 
@@ -228,32 +230,127 @@ namespace DOANLTHDT_1988216.Controllers
             return _m_HoaDonNhapHang.getHoaDonById(int.Parse(id));
         }
 
-        public bool suaHoaDonNhapHang(string id, string MaMH, string SoLuong, string DonGia, string PhiVanChuyen, string NgayNhap)
+        public List<Message> suaHoaDonNhapHang(string idHoaDon, string MaMH, string SoLuong, string DonGia, string PhiVanChuyen, string NgayNhap)
         {
-            // Convert dữ liệu
-            int idHD = int.Parse(id);
-            int idMH = int.Parse(MaMH);
-            int sl = int.Parse(SoLuong);
-            int dg = int.Parse(DonGia);
-            int pvc = int.Parse(PhiVanChuyen);
-            DateTime NgayNhapHang = DateTime.Parse(NgayNhap);
+            // ======= VALIDATION =========
+            // Biến cờ cho kết quả validate dữ liệu
+            bool isValidData = false;
 
-            // Tạo Object HoaDonNhapHang mới
-            HoaDonNhapHang hd = new HoaDonNhapHang();
-            hd.MA_HOA_DON = idHD;
-            hd.MA_MAT_HANG = idMH;
-            hd.SO_LUONG = sl;
-            hd.DON_GIA = dg;
-            hd.PHI_SHIP = pvc;
-            hd.NGAY_NHAP = NgayNhapHang;
+            // List message validate
+            List<Message> listMsg = this.validateUserInput(idHoaDon, MaMH, SoLuong, DonGia, PhiVanChuyen, NgayNhap);
+            if (listMsg.Count == 0)
+            {
+                isValidData = true; // Validate dữ liệu thành công
+            }
+            // ======= VALIDATION =========
 
-            // Gọi model
-            return _m_HoaDonNhapHang.updateHoaDon(hd);
+            if(isValidData == true)
+            {
+                // Convert dữ liệu
+                int idHD = int.Parse(idHoaDon);
+                int idMH = int.Parse(MaMH);
+                int sl = int.Parse(SoLuong);
+                int dg = int.Parse(DonGia);
+                int pvc = int.Parse(PhiVanChuyen);
+                DateTime NgayNhapHang = DateTime.Parse(NgayNhap);
+
+                // Tạo Object HoaDonNhapHang mới
+                HoaDonNhapHang hd = new HoaDonNhapHang();
+                hd.MA_HOA_DON = idHD;
+                hd.MA_MAT_HANG = idMH;
+                hd.SO_LUONG = sl;
+                hd.DON_GIA = dg;
+                hd.PHI_SHIP = pvc;
+                hd.NGAY_NHAP = NgayNhapHang;
+
+                // Gọi model
+                if(_m_HoaDonNhapHang.updateHoaDon(hd))
+                {
+                    Message msg = new Message();
+                    msg.TYPE = "success";
+                    msg.CONTENT = String.Format("{0} {1} {2}",
+                        Constants.CAP_NHAT,
+                        Constants.HOA_DON,
+                        Constants.THANH_CONG).ToUpper();
+                    listMsg.Add(msg);
+                }
+                else
+                {
+                    Message msg = new Message();
+                    msg.TYPE = "success";
+                    msg.CONTENT = String.Format("{0} {1} {2}",
+                        Constants.CAP_NHAT,
+                        Constants.HOA_DON,
+                        Constants.THANH_CONG).ToUpper();
+                    listMsg.Add(msg);
+                }
+            }
+            return listMsg;
         }
 
-        public bool xoaHoaDon(string id)
+        public List<Message> xoaHoaDon(string id)
         {
-            return _m_HoaDonNhapHang.deleteHoaDon(int.Parse(id));
+            List<Message> listMsg = new List<Message>();
+            bool isValid = false;
+
+            HoaDonNhapHang currentHD = _m_HoaDonNhapHang.getHoaDonById(int.Parse(id));
+            List<HoaDonNhapHang> listHDNH = _m_HoaDonNhapHang.getListHDNhapHangByMatHangID(currentHD.MA_MAT_HANG);
+            List<HoaDonBanHang> listHDBH = _m_HoaDonBanHang.getListHDBanHangByMatHangID(currentHD.MA_MAT_HANG);
+
+            // Xóa currentHD trong listHDNH
+            HoaDonNhapHang itemToRemove = listHDNH.Single(r => r.MA_HOA_DON == int.Parse(id));
+            listHDNH.Remove(itemToRemove);
+
+            int sum1 = 0;
+            foreach(var h in listHDNH)
+            {
+                sum1 += h.SO_LUONG;
+            }
+
+            int sum2 = 0;
+            foreach(var h in listHDBH)
+            {
+                sum2 += h.SO_LUONG;
+            }
+
+            if(sum1 < sum2)
+            {
+                Message msg = new Message();
+                msg.TYPE = "danger";
+                msg.CONTENT = String.Format("Không thể xóa hóa đơn nhập hàng này vì tổng số lượng hàng đã nhập sau khi " +
+                    "xóa là {0} < tổng số lượng hàng đã bán là {1}. Vui lòng <a href='v_DanhSachHoaDonBanHang.cshtml'>click vào đây để cập nhật lại số lượng bán</a>.",
+                    sum1, sum2);
+                listMsg.Add(msg);
+            }
+            else
+            {
+                isValid = true;
+            }
+
+            if(isValid == true)
+            {
+                if (_m_HoaDonNhapHang.deleteHoaDon(int.Parse(id)))
+                {
+                    Message msg = new Message();
+                    msg.TYPE = "success";
+                    msg.CONTENT = String.Format("{0} {1} {2}",
+                        Constants.XOA,
+                        Constants.HOA_DON,
+                        Constants.THANH_CONG).ToUpper();
+                    listMsg.Add(msg);
+                }
+                else
+                {
+                    Message msg = new Message();
+                    msg.TYPE = "danger";
+                    msg.CONTENT = String.Format("{0} {1} {2}",
+                        Constants.XOA,
+                        Constants.HOA_DON,
+                        Constants.THAT_BAI).ToUpper();
+                    listMsg.Add(msg);
+                }
+            }
+            return listMsg;
         }
     }
 }

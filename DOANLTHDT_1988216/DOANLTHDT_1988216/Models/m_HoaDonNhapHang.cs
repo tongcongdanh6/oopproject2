@@ -102,6 +102,20 @@ namespace DOANLTHDT_1988216.Models
             return null;
         }
 
+        public List<HoaDonNhapHang> getListHDNhapHangByMatHangID(int id)
+        {
+            List<HoaDonNhapHang> ds = this.getAllHoaDonNhapHang();
+            List<HoaDonNhapHang> res = new List<HoaDonNhapHang>();
+            foreach (var d in ds)
+            {
+                if (d.MA_MAT_HANG == id)
+                {
+                    res.Add(d);
+                }
+            }
+            return res;
+        }
+
         public bool updateHoaDon(HoaDonNhapHang newHD)
         {
             List<HoaDonNhapHang> ds = this.getAllHoaDonNhapHang();

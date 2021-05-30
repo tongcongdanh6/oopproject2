@@ -9,6 +9,7 @@ namespace DOANLTHDT_1988216.Functions
     {
         public const string KHONG_TIM_THAY_MAT_HANG = "Không tìm thấy mặt hàng này";
         public const string KHONG_TIM_THAY_LOAI_HANG = "Không tìm thấy loại hàng này";
+        public const string KHONG_TIM_THAY = "Không tìm thấy";
         public const string DE = "để";
         public const string CAP_NHAT = "cập nhật";
         public const string THANH_CONG = "thành công";

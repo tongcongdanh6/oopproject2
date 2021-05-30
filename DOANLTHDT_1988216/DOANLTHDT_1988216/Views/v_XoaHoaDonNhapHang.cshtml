@@ -1,5 +1,6 @@
 ﻿@using DOANLTHDT_1988216.Controllers
 @using DOANLTHDT_1988216.Entities
+@using DOANLTHDT_1988216.Functions
 
 @{
     Layout = "_Layout.cshtml";
@@ -9,51 +10,73 @@
 
     // Khởi tạo các biến cần thiết
     HoaDonNhapHang curHD = null;
-    string message = "";
+
+    // Message lưu kết quả thông báo trả về
+    List<Message> msg = new List<Message>();
 
     if (!String.IsNullOrEmpty(Request["id"]))
     {
-        curHD = c_hdnh.getHoaDonById(Request["id"]);
 
-        if (curHD == null)
-        { message = "Không tìm thấy hóa đơn nhập hàng này để xóa"; }
+
+        if (!int.TryParse(Request["id"], out int r))
+        {
+            msg.Add(new Message("warning", String.Format("{0} {1} {2}", Constants.MA, Constants.HOA_DON, Constants.KHONG_HOP_LE)));
+        }
         else
         {
-            message = "Bạn có thực sự muốn xóa hóa đơn nhập hàng <b>" + curHD.MA_HOA_DON + "</b>";
+            curHD = c_hdnh.getHoaDonById(Request["id"]);
+        }
+
+        if (curHD == null)
+        {
+            msg.Add(new Message("warning", String.Format("{0} {1} {2} {3}", Constants.KHONG_TIM_THAY, Constants.HOA_DON, Constants.DE, Constants.XOA)));
+        }
+        else
+        {
+            msg.Add(new Message("warning", String.Format("{0} {1} <b>{2}</b> này?", Constants.BAN_CO_THUC_SU_MUON, Constants.XOA, curHD.MA_HOA_DON)));
         }
 
 
         // Nếu submit dữ liệu
         if (IsPost)
         {
-            if (c_hdnh.xoaHoaDon(Request["id"]))
+            msg = c_hdnh.xoaHoaDon(Request["id"]);
+
+            if (msg.Count == 1 && msg[0].TYPE == "success")
             {
-                message = "Xóa thành công";
                 Response.Redirect("~/Views/v_DanhSachHoaDonNhapHang.cshtml");
-            }
-            else
-            {
-                message = "Xóa THẤT BẠI";
             }
         }
     }
     else
     {
-        message = "Vui lòng chọn hóa đơn nhập hàng cần xóa";
+        msg.Add(new Message("info", String.Format("{0} {1} {2} {3}",
+            Constants.VUI_LONG_CHON,
+            Constants.HOA_DON,
+            Constants.DE,
+            Constants.XOA)));
     }
 }
 
-<div>
-    @{ if (curHD != null)
-        {
-            <form action="~/Views/v_XoaHoaDonNhapHang.cshtml?id=@curHD.MA_HOA_DON" method="post">
-                <button class="btn btn-primary" type="submit">Xóa</button>
-            </form>
-        }}
-    @{
-        if (!String.IsNullOrEmpty(message))
-        {
-            <div class="alert alert-info">@Html.Raw(message)</div>
-        }
-    }
+<div class="container">
+    <div class="row py-5 justify-content-center">
+        <div class="col-md-6">
+            <h1>@Page.Title</h1>
+            @{
+                if (msg.Count > 0)
+                {
+                    foreach (var m in msg)
+                    {
+                        <div class="alert alert-@m.TYPE">@Html.Raw(m.CONTENT)</div>
+                    }
+                }
+            }
+            @{ if (curHD != null)
+                {
+                    <form action="~/Views/v_XoaHoaDonNhapHang.cshtml?id=@curHD.MA_HOA_DON" method="post">
+                        <button class="btn btn-primary" type="submit">Xóa</button>
+                    </form>
+                }}
+        </div>
+    </div>
 </div>

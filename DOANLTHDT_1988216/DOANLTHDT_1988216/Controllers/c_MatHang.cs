@@ -269,7 +269,7 @@ namespace DOANLTHDT_1988216.Controllers
                     Message msg = new Message();
                     msg.TYPE = "success";
                     msg.CONTENT = String.Format("{0} {1} {2}",
-                        Constants.THEM,
+                        Constants.CAP_NHAT,
                         Constants.MAT_HANG,
                         Constants.THANH_CONG).ToUpper();
                     listMsg.Add(msg);
@@ -279,7 +279,7 @@ namespace DOANLTHDT_1988216.Controllers
                     Message msg = new Message();
                     msg.TYPE = "success";
                     msg.CONTENT = String.Format("{0} {1} {2}",
-                        Constants.THEM,
+                        Constants.CAP_NHAT,
                         Constants.MAT_HANG,
                         Constants.THAT_BAI).ToUpper();
                     listMsg.Add(msg);

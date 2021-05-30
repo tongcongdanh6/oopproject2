@@ -140,8 +140,6 @@ namespace DOANLTHDT_1988216.Models
                 }
             }
 
-            List<MatHang> res = dsMHThuocLoaiHang;
-
             // Xóa loại hàng
             LoaiHang temp = new LoaiHang();
             bool flag = false;
