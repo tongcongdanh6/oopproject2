@@ -1,5 +1,6 @@
 ﻿@using DOANLTHDT_1988216.Controllers
 @using DOANLTHDT_1988216.Entities
+@using DOANLTHDT_1988216.Functions
 
 @{
     Layout = "_Layout.cshtml";
@@ -11,40 +12,67 @@
     List<MatHang> dsMH = new List<MatHang>();
     HoaDonBanHang curHD = null;
 
-    string message = "";
+    // Message lưu kết quả thông báo trả về
+    List<Message> msg = new List<Message>();
 
     if (!String.IsNullOrEmpty(Request["id"]))
     {
-        curHD = c_hd.getHoaDonById(Request["id"]);
+
         dsMH = c_MatHang.getDanhSachMatHang();
 
+        if (!int.TryParse(Request["id"], out int r))
+        {
+            msg.Add(new Message("warning", String.Format("{0} {1} {2}", Constants.MA, Constants.HOA_DON, Constants.KHONG_HOP_LE)));
+        }
+        else
+        {
+            curHD = c_hd.getHoaDonById(Request["id"]);
+        }
+
         if (curHD == null)
-        { message = "Không tìm thấy loại hàng này để cập nhật"; }
+        {
+            msg.Add(new Message("warning", String.Format("{0} {1} {2} {3}", Constants.KHONG_TIM_THAY, Constants.HOA_DON, Constants.DE, Constants.CAP_NHAT)));
+        }
 
 
         // Nếu submit dữ liệu
         if (IsPost)
         {
-            c_hd.suaHoaDonBanHang(Request["id"],
+            msg = c_hd.suaHoaDonBanHang(Request["id"],
                 Request["id_mat_hang"],
                 Request["so_luong"],
                 Request["don_gia"],
                 Request["phi_van_chuyen"],
                 Request["ngay_nhap_hang"]);
-
-            Response.Redirect("~/Views/v_DanhSachHoaDonBanHang.cshtml");
-
+            if (msg.Count == 1 && msg[0].TYPE == "success")
+            {
+                Response.Redirect("~/Views/v_DanhSachHoaDonBanHang.cshtml");
+            }
         }
     }
     else
     {
-        message = "Vui lòng chọn hóa đơn bán hàng cần cập nhật";
+        msg.Add(new Message("info", String.Format("{0} {1} {2} {3}",
+            Constants.VUI_LONG_CHON,
+            Constants.HOA_DON,
+            Constants.DE,
+            Constants.CAP_NHAT)));
     }
 }
 
 <div class="container">
-    <div class="row">
+    <div class="row py-5 justify-content-center">
         <div class="col-md-6">
+            <h1>@Page.Title</h1>
+            @{
+                if (msg.Count > 0)
+                {
+                    foreach (var m in msg)
+                    {
+                        <div class="alert alert-@m.TYPE">@m.CONTENT</div>
+                    }
+                }
+            }
             @{ if (curHD != null)
                 {
                     <form action="~/Views/v_SuaHoaDonBanHang.cshtml?id=@curHD.MA_HOA_DON" method="post">
@@ -53,27 +81,20 @@
                             @{
                                 foreach (var mh in dsMH)
                                 {
-                                    <option value=@mh.MA_MAT_HANG @{
-                                        if(c_hd.getHoaDonById(Request["id"]).MA_MAT_HANG == mh.MA_MAT_HANG) { @Html.Raw("selected");}
-                                    }>@mh.TEN_MAT_HANG</option>
+                                    <option value=@mh.MA_MAT_HANG @{ if (c_hd.getHoaDonById(Request["id"]).MA_MAT_HANG == mh.MA_MAT_HANG) { @Html.Raw("selected")  ; } }>
+                                        @mh.TEN_MAT_HANG
+                                    </option>
                                 }
                             }
                         </select>
                         <label for="so_luong" class="label">Số lượng nhập</label>
-                        <input class="form-control" type="number" name="so_luong" placeholder="Số lượng nhập" value="@curHD.SO_LUONG"/>
-                        <input class="form-control" type="number" name="don_gia" placeholder="Đơn giá" value="@curHD.DON_GIA"/>
-                        <input class="form-control" type="number" name="phi_van_chuyen" placeholder="Phí vận chuyển" value="@curHD.PHI_SHIP"/>
-                        <input class="form-control" type="date" name="ngay_nhap_hang" placeholder="Ngày nhập hàng" value="@curHD.NGAY_BAN.ToString("yyyy-MM-dd")"/>
+                        <input class="form-control" type="number" name="so_luong" placeholder="Số lượng nhập" value="@curHD.SO_LUONG" />
+                        <input class="form-control" type="number" name="don_gia" placeholder="Đơn giá" value="@curHD.DON_GIA" />
+                        <input class="form-control" type="number" name="phi_van_chuyen" placeholder="Phí vận chuyển" value="@curHD.PHI_SHIP" />
+                        <input class="form-control" type="date" name="ngay_nhap_hang" placeholder="Ngày nhập hàng" value="@curHD.NGAY_BAN.ToString("yyyy-MM-dd")" />
 
                         <button class="btn btn-success" type="submit">Sửa hóa đơn bán hàng</button>
                     </form>
-               }
-            }
-
-            @{
-                if (!String.IsNullOrEmpty(message))
-                {
-                    <div class="alert alert-info">@message</div>
                 }
             }
         </div>

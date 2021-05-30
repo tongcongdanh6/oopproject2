@@ -244,7 +244,10 @@ namespace DOANLTHDT_1988216.Controllers
             }
             // ======= VALIDATION =========
 
-            if(isValidData == true)
+
+
+
+            if (isValidData == true)
             {
                 // Convert dữ liệu
                 int idHD = int.Parse(idHoaDon);
@@ -263,27 +266,67 @@ namespace DOANLTHDT_1988216.Controllers
                 hd.PHI_SHIP = pvc;
                 hd.NGAY_NHAP = NgayNhapHang;
 
-                // Gọi model
-                if(_m_HoaDonNhapHang.updateHoaDon(hd))
+                bool isValidLogic = false;
+                // Kiểm tra Logic, nếu như số lượng hàng nhập làm cho TỔNG HÀNG NHẬP - TỔNG HÀNG BÁN < 0 là không hợp lệ
+                List<HoaDonNhapHang> listHDNH = _m_HoaDonNhapHang.getListHDNhapHangByMatHangID(idMH);
+                List<HoaDonBanHang> listHDBH = _m_HoaDonBanHang.getListHDBanHangByMatHangID(idMH);
+
+                HoaDonNhapHang itemToUpdate = listHDNH.Single(r => r.MA_HOA_DON == idHD);
+                HoaDonNhapHang tmp = itemToUpdate;
+                itemToUpdate.SO_LUONG = sl;
+
+                listHDNH.Remove(tmp);
+                listHDNH.Add(itemToUpdate);
+
+                int sumBH = 0, sumNH = 0;
+                foreach(var d in listHDNH)
+                {
+                    sumNH += d.SO_LUONG;
+                }
+                foreach(var d in listHDBH)
+                {
+                    sumBH += d.SO_LUONG;
+                }
+
+                if(sumNH < sumBH)
                 {
                     Message msg = new Message();
-                    msg.TYPE = "success";
-                    msg.CONTENT = String.Format("{0} {1} {2}",
-                        Constants.CAP_NHAT,
-                        Constants.HOA_DON,
-                        Constants.THANH_CONG).ToUpper();
+                    msg.TYPE = "danger";
+                    msg.CONTENT = String.Format("Không thể sửa hóa đơn nhập hàng này vì tổng số lượng hàng đã nhập sau khi " +
+                        "sửa là {0} < tổng số lượng hàng đã bán là {1}. Vui lòng cập nhật lại số lượng bán.",
+                        sumNH, sumBH);
                     listMsg.Add(msg);
                 }
                 else
                 {
-                    Message msg = new Message();
-                    msg.TYPE = "success";
-                    msg.CONTENT = String.Format("{0} {1} {2}",
-                        Constants.CAP_NHAT,
-                        Constants.HOA_DON,
-                        Constants.THANH_CONG).ToUpper();
-                    listMsg.Add(msg);
+                    isValidLogic = true;
                 }
+
+                if(isValidLogic == true)
+                {
+                    // Gọi model
+                    if (_m_HoaDonNhapHang.updateHoaDon(hd))
+                    {
+                        Message msg = new Message();
+                        msg.TYPE = "success";
+                        msg.CONTENT = String.Format("{0} {1} {2}",
+                            Constants.CAP_NHAT,
+                            Constants.HOA_DON,
+                            Constants.THANH_CONG).ToUpper();
+                        listMsg.Add(msg);
+                    }
+                    else
+                    {
+                        Message msg = new Message();
+                        msg.TYPE = "warning";
+                        msg.CONTENT = String.Format("{0} {1} {2}",
+                            Constants.CAP_NHAT,
+                            Constants.HOA_DON,
+                            Constants.THAT_BAI).ToUpper();
+                        listMsg.Add(msg);
+                    }
+                }
+
             }
             return listMsg;
         }
@@ -318,7 +361,7 @@ namespace DOANLTHDT_1988216.Controllers
                 Message msg = new Message();
                 msg.TYPE = "danger";
                 msg.CONTENT = String.Format("Không thể xóa hóa đơn nhập hàng này vì tổng số lượng hàng đã nhập sau khi " +
-                    "xóa là {0} < tổng số lượng hàng đã bán là {1}. Vui lòng <a href='v_DanhSachHoaDonBanHang.cshtml'>click vào đây để cập nhật lại số lượng bán</a>.",
+                    "xóa là {0} < tổng số lượng hàng đã bán là {1}. Vui lòng cập nhật lại số lượng bán</a>.",
                     sum1, sum2);
                 listMsg.Add(msg);
             }

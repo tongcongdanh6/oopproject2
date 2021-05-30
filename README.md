@@ -43,7 +43,13 @@
 ### Module THÊM HÓA ĐƠN NHẬP HÀNG
 - Validate dữ liệu trước khi thêm
 
-11:17 AM 5/30/2021
+##11:17 AM 5/30/2021
 ### Module SỬA, XÓA HÓA ĐƠN NHẬP HÀNG
 - Validate dữ liệu trước khi sửa
 - Trước khi xóa kiểm tra tính hợp lệ của dữ liệu, nếu tổng số lượng nhập bé hơn tổng số lượng bán thì không cho phép xóa. Bắt buộc phải điều chỉnh lại một trong 2 cái để hiệu số lại phải lớn hơn 0.
+
+## 12:20 PM 5/30/2021
+### TỔNG KẾT
+
+### Module SỬA HÓA ĐƠN NHẬP HÀNG
+- Kiểm tra tính logic, nếu số lượng nhập làm cho tổng số hàng đã nhập trừ đi cho tổng hàng đã bán < 0 thì không cho sửa

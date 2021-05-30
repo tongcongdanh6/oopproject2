@@ -7,22 +7,24 @@
 
     c_MatHang c_MatHang = new c_MatHang();
     c_HoaDonBanHang c_HD = new c_HoaDonBanHang();
-    List<MatHang> dsMH = new List<MatHang>();
+    List<MatHang> dsMH = c_MatHang.getDanhSachMatHang();
 
-    if(IsPost)
+    // Message lưu kết quả thông báo trả về
+    List<Message> msg = new List<Message>();
+
+    if (IsPost)
     {
-        c_HD.themHoaDonBanHang(Request["id_mat_hang"],
+        msg = c_HD.themHoaDonBanHang("0",
+            Request["id_mat_hang"],
             Request["so_luong"],
             Request["don_gia"],
             Request["phi_van_chuyen"],
             Request["ngay_nhap_hang"]);
-       
+
+        if (msg.Count == 1 && msg[0].TYPE == "success")
+        {
             Response.Redirect("~/Views/v_DanhSachHoaDonBanHang.cshtml");
-       
-    }
-    else
-    {
-        dsMH = c_MatHang.getDanhSachMatHang();
+        }
     }
 }
 
@@ -30,7 +32,15 @@
     <div class="row justify-content-center py-5">
         <div class="col-md-6">
             <h1>Thêm hóa đơn bán hàng</h1>
-            <hr />
+            @{
+                if (msg.Count > 0)
+                {
+                    foreach (var m in msg)
+                    {
+                        <div class="alert alert-@m.TYPE">@Html.Raw(m.CONTENT)</div>
+                    }
+                }
+            }
             <form action="~/Views/v_ThemHoaDonBanHang.cshtml" method="post">
                 <label for="id_mat_hang">Tên mặt hàng</label>
                 <select class="form-control" name="id_mat_hang">
@@ -42,10 +52,10 @@
                     }
                 </select>
                 <label for="so_luong" class="label">Số lượng bán</label>
-                <input class="form-control" type="number" name="so_luong" placeholder="Số lượng bán" />
-                <input class="form-control" type="number" name="don_gia" placeholder="Đơn giá" />
-                <input class="form-control" type="number" name="phi_van_chuyen" placeholder="Phí vận chuyển" />
-                <input class="form-control" type="date" name="ngay_nhap_hang" placeholder="Ngày bán hàng" />
+                <input class="form-control" type="number" name="so_luong" placeholder="Số lượng bán" value="@Response.Cookies["SoLuong"].Value"/>
+                <input class="form-control" type="number" name="don_gia" placeholder="Đơn giá" value="@Response.Cookies["DonGia"].Value"/>
+                <input class="form-control" type="number" name="phi_van_chuyen" placeholder="Phí vận chuyển" value="@Response.Cookies["PhiVanChuyen"].Value"/>
+                <input class="form-control" type="date" name="ngay_nhap_hang" placeholder="Ngày bán hàng" value="@Response.Cookies["NgayBan"].Value"/>
 
                 <button class="btn btn-success" type="submit">Thêm hóa đơn nhập hàng</button>
             </form>

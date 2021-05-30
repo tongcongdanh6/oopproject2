@@ -31,6 +31,7 @@ namespace DOANLTHDT_1988216.Functions
         public const string PHI_VAN_CHUYEN = "phí vận chuyển";
         public const string KHONG_DUOC_BE_HON_0 = "không được bé hơn 0";
         public const string NGAY_NHAP_HANG = "ngày nhập hàng";
+        public const string NGAY_BAN_HANG = "ngày bán hàng";
 
         // ERRORS MESSAGE
 

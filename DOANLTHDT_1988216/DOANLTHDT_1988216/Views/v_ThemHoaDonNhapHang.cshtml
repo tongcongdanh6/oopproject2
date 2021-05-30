@@ -37,7 +37,7 @@
                 {
                     foreach (var m in msg)
                     {
-                        <div class="alert alert-@m.TYPE">@m.CONTENT</div>
+                        <div class="alert alert-@m.TYPE">@Html.Raw(m.CONTENT)</div>
                     }
                 }
             }
